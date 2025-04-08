@@ -1,5 +1,8 @@
 # Wadokei
-
+Poniżej jest którka instrukacja obsługi git'a. <br /> 
+Nie wiem jak będziemy pracować, ale najlepiej jakby każdy pracował na własnym branchu, jeżeli każdy coś innego będzie robił. Można też podzielić na np. backend i forntend, do dogadania. <br /> 
+Oczywiście można korzystać z po prostu z githuba w przeglądarce, jednak git jest zapewne szybszy. <br /> 
+Pamiętajcie, żeby nie commitować każdej zmiany ustawienia przecinka, tylko jakieś większe rzeczy - nie ma sensu co chwilę aktualizować, bo to sprawia problem innym, którzy korzystają z repo. <br /> 
 
 # Git - Instrukcja obsługi
 
