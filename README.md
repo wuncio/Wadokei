@@ -4,6 +4,8 @@ Nie wiem jak będziemy pracować, ale najlepiej jakby każdy pracował na własn
 Oczywiście można korzystać z po prostu z githuba w przeglądarce, jednak git jest zapewne szybszy. <br /> 
 Pamiętajcie, żeby nie commitować każdej zmiany ustawienia przecinka, tylko jakieś większe rzeczy - nie ma sensu co chwilę aktualizować, bo to sprawia problem innym, którzy korzystają z repo. <br /> 
 
+Co do kodów, to piszcie po angielsku i z komentarzami, przykład w time_and_sun.py. Ofc swój kod można wrzuić w Claude/Chat z poleceniem typu "translate to english, add comments, fix foramatting"
+
 # Git - Instrukcja obsługi
 
 Ta instrukcja zawiera podstawowe informacje dotyczące korzystania z systemu kontroli wersji Git w środowisku lokalnym.
