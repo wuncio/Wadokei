@@ -66,6 +66,23 @@ Aby dodać wszystkie zmodyfikowane pliki do kolejki zmian:
 ```bash
 git add .
 ```
+Tutaj sugestia, żeby dodawac pliki raczej po nazwach, ewentualnie stworzyć plik gitignore:
+W głównym katalogu repozytorium stwórz plik .gitignore
+Dodaj zawartość, którą git zignoruje przy wykonywaniu komendy 
+```bash 
+git add .
+```
+Zawartość dodać można przy użyciu
+```txt
+# Ignoruj pliki tymczasowe
+*.tmp
+
+# Ignoruj katalog z plikami budowania
+/build/
+
+# Ignoruj konkretny plik
+config.json
+```
 
 Aby dodać konkretny plik:
 ```bash
@@ -212,4 +229,4 @@ git stash pop
 
 ---
 
-Pamiętaj, że to tylko podstawowe instrukcje. Git oferuje wiele więcej możliwości i opcji dla bardziej zaawansowanych scenariuszy użycia.
+
