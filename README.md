@@ -6,6 +6,9 @@ Pamiętajcie, żeby nie commitować każdej zmiany ustawienia przecinka, tylko j
 
 Co do kodów, to piszcie po angielsku i z komentarzami, przykład w time_and_sun.py. Ofc swój kod można wrzuić w Claude/Chat z poleceniem typu "translate to english, add comments, fix foramatting"
 
+#Link do arkusza testowego
+https://sggwpl-my.sharepoint.com/:x:/g/personal/s211023_sggw_edu_pl/EQ6HWAF4E7FIkiIL0NvcbyoBf3Alt7RGVhKxA5kDoySnpw?e=ExRShz
+
 # Git - Instrukcja obsługi
 
 Ta instrukcja zawiera podstawowe informacje dotyczące korzystania z systemu kontroli wersji Git w środowisku lokalnym.
