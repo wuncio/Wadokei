@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Analog Clock with Timezones</title>
+  <style>
+    body {
+      background: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: sans-serif;
+    }
+    .timezoneSelect {
+      margin-bottom: 10px;
+      padding: 6px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #999;
+    }
+
+    .container {
+      display: flex;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .clock {
+      width: 300px;
+      height: 300px;
+      background-image: url('clockface.png'); /* Replace with your image path */
+      background-size: cover;
+      background-position: center;
+      border: 8px solid #333;
+      border-radius: 50%;
+      position: relative;
+    }
+
+    .center {
+      width: 10px;
+      height: 10px;
+      background: #333;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      z-index: 10;
+    }
+
+    .hand {
+      position: absolute;
+      bottom: 50%;
+      left: 50%;
+      transform-origin: bottom center;
+      transform: translateX(-50%) rotate(0deg);
+      border-radius: 6px;
+      background: white;
+      box-shadow: 0 0 0 2px black;
+      z-index: 5;
+    }
+
+    .hour {
+      width: 8px;
+      height: 80px;
+    }
+
+    .minute {
+      width: 4px;
+      height: 120px;
+    }
+
+    .number {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      text-align: center;
+      line-height: 30px;
+      font-weight: bold;
+      color: #333;
+      transform: translate(-50%, -50%);
+    }
+
+    .seconds-display {
+      margin-top: 20px;
+      font-size: 24px;
+      color: #333;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .timezone-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 16px;
+      background: #fff;
+      border: 2px solid #333;
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .timezone {
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <label for="timezoneSelect">Analog Clock Timezone:</label>
+    <select id="timezoneSelect">
+      <option value="local">Local Time</option>
+      <option value="America/New_York">New York</option>
+      <option value="Europe/London">London</option>
+      <option value="Asia/Tokyo">Tokyo</option>
+      <option value="Australia/Sydney">Sydney</option>
+    </select>
+    <div>
+      <div class="clock" id="clock">
+        <div class="hand hour" id="hourHand"></div>
+        <div class="hand minute" id="minuteHand"></div>
+        <div class="center"></div>
+      </div>
+      <div class="seconds-display" id="secondsDisplay">Seconds: 00</div>
+    </div>
+
+    <div class="timezone-panel" id="timezonePanel">
+      <div class="timezone" id="localTime">Local: --:--:--</div>
+      <div class="timezone" id="nyTime">New York: --:--:--</div>
+      <div class="timezone" id="londonTime">London: --:--:--</div>
+      <div class="timezone" id="tokyoTime">Tokyo: --:--:--</div>
+      <div class="timezone" id="sydneyTime">Sydney: --:--:--</div>
+    </div>
+  </div>
+
+  <script>
+    // Add hour numbers to the clock
+    const clock = document.getElementById("clock");
+    for (let i = 1; i <= 12; i++) {
+      const number = document.createElement("div");
+      number.className = "number";
+      number.textContent = i;
+
+      const angle = (i * 30 - 90) * (Math.PI / 180);
+      const radius = 120;
+      const x = 150 + radius * Math.cos(angle);
+      const y = 150 + radius * Math.sin(angle);
+
+      number.style.left = `${x}px`;
+      number.style.top = `${y}px`;
+
+      clock.appendChild(number);
+    }
+
+    function updateClock() {
+      const selectedZone = document.getElementById("timezoneSelect").value;
+      const now = new Date();
+
+      let time;
+      if (selectedZone === "local") {
+        time = now;
+      } else {
+        const zoned = now.toLocaleString("en-US", { timeZone: selectedZone });
+        time = new Date(zoned);
+      }
+
+      const hour = time.getHours();
+      const minute = time.getMinutes();
+      const second = time.getSeconds();
+
+      const hourDeg = (hour % 12) * 30 + minute * 0.5;
+      const minuteDeg = minute * 6;
+
+      document.getElementById("hourHand").style.transform = `translateX(-50%) rotate(${hourDeg}deg)`;
+      document.getElementById("minuteHand").style.transform = `translateX(-50%) rotate(${minuteDeg}deg)`;
+      document.getElementById("secondsDisplay").textContent = `Seconds: ${second.toString().padStart(2, '0')}`;
+
+      updateTimeZones();
+    }
+
+    function formatTime(date) {
+      return date.toLocaleTimeString('en-GB', { hour12: false });
+    }
+
+    function updateTimeZones() {
+      const now = new Date();
+      document.getElementById("localTime").textContent = `Local: ${formatTime(now)}`;
+
+      const nyTime = new Date(now.toLocaleString("en-US", { timeZone: "America/New_York" }));
+      const londonTime = new Date(now.toLocaleString("en-US", { timeZone: "Europe/London" }));
+      const tokyoTime = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Tokyo" }));
+      const sydneyTime = new Date(now.toLocaleString("en-US", { timeZone: "Australia/Sydney" }));
+
+      document.getElementById("nyTime").textContent = `New York: ${formatTime(nyTime)}`;
+      document.getElementById("londonTime").textContent = `London: ${formatTime(londonTime)}`;
+      document.getElementById("tokyoTime").textContent = `Tokyo: ${formatTime(tokyoTime)}`;
+      document.getElementById("sydneyTime").textContent = `Sydney: ${formatTime(sydneyTime)}`;
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock();
+  </script>
+</body>
+</html>
