@@ -1,5 +1,6 @@
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, request
 import time
+from pytz import timezone
 from datetime import datetime
 import webbrowser
 
@@ -9,32 +10,63 @@ from location_calc import lat_long
 import ipapi
 import math
 
-try:
-    ip = ipapi.location()
-except:
-    print("Brak internetu")
-    exit(0)
-city = ip["city"]
-region = ip["region"]
-country = ip["country_name"]
-place = f"{city} {region} {country}"
+# Functions to set up timezone info
+# Gests lat and long for local timezone based on ip adress
+def get_local_coors():
+    try:
+        ip = ipapi.location()
+    except:
+        print("Brak internetu")
+        exit(0)
+    city = ip["city"]
+    region = ip["region"]
+    country = ip["country_name"]
+    place = f"{city} {region} {country}"
+    return lat_long(place)
 
-coords = lat_long(place)
-latitude = float(coords[1])
-longitude = float(coords[2])
-sun = sun_set_raise("", latitude, longitude)
+# Gets lat and long for selected timezone given as a strng:
+def get_time_zone_coords(time_zone: str):
+    try:
+        return lat_long(time_zone)
+    except:
+        print("Niepoprawna strefa czasowa - nie można znaleźć koordynatów")
+        exit(0)
+# Generalised method for getting coordinates
+def get_coords(time_zone: str):
+    if time_zone.lower()=="local":
+        return get_local_coors()
+    else:
+        return get_time_zone_coords(time_zone)
 
-day = sun[2]
-night = sun[3]
-sunrise = sun[6]
-sunset = sun[7]
+
+def change_time_zone(location: str):
+    global time_zone, latitude, longitude, day, night, sunrise, sunset
+    time_zone = location
+    coords = get_coords(location)
+    latitude = float(coords[1])
+    longitude = float(coords[2])
+    sun = sun_set_raise("", latitude, longitude)
+
+    day = sun[2]
+    night = sun[3]
+    sunrise = sun[6]
+    sunset = sun[7]
+
+#Set up global timezone variables
+latitude = None
+longitude = None
+
+day = None
+night = None
+sunrise = None
+sunset = None
+
+#Load initial timezone for loal time zone
+time_zone = "local"
+change_time_zone(time_zone)
 
 webbrowser.open('http://localhost:5000', new=0, autoraise=True) #Otwiera dwie strony
 
-quarter = {
-    "N": {"pi_s": 0, "pi_e": math.pi, "q_s": sunset, "q_e": sunrise},
-    "D": {"pi_s": math.pi, "pi_e": math.pi * 2, "q_s": sunrise, "q_e": sunset}
-}
 app = Flask(__name__)
 
 # Time scaling factor (for fast time simulation)
@@ -43,35 +75,45 @@ time_scale_factor = 1  # 10 minutes pass in 30 seconds (10 * 60) / 30
 
 @app.route('/')
 def index():
-    return render_template('index.html')  # This will load the frontend HTML
+    return render_template('zegar.html')  # This will load the frontend HTML
 
 
 @app.route('/time', methods=['GET'])
 def get_time():
-    global day, night
-    # Get current time
-    date = datetime.now()
-    date_dec = int(format(date, '%H')) + int(format(date, '%M'))/60 + int(format(date, '%S'))/3600
-    if sunrise <= date_dec <= sunset:
-        temp = "D"
+    global time_zone
+    if time_zone == "local":
+        date = datetime.now()
     else:
-        temp = "N"
-    print(temp)
-    pi_start = quarter[temp]["pi_s"]
-    pi_end = quarter[temp]["pi_e"]
-    qt_start = quarter[temp]["q_s"]
-    qt_end = quarter[temp]["q_e"]
+        try:
+            tz = timezone(time_zone)
+            date = datetime.now(tz)
+        except Exception as e:
+            print(f"Invalid timezone: {time_zone}. Falling back to local.")
+            date = datetime.now()
     return jsonify({
         'hours': format(date, '%H'),
         'minutes': format(date, '%M'),
-        'seconds': format(date, '%S'),
-        "len_day": day,
-        "len_night": night,
-        "pi_start":pi_start,
-        "pi_end": pi_end,
-        "qt_start": qt_start,
-        "qt_end": qt_end
+        'seconds': format(date, '%S')
     })
+@app.route('/set_timezone', methods=['POST'])
+def set_timezone():
+    global time_zone
+    data = request.get_json()
+    new_tz = data.get('timezone')
+
+    if new_tz:
+        change_time_zone(new_tz)
+        return jsonify({"message": "Timezone updated", "time_zone": time_zone}), 200
+    else:
+        return jsonify({"error": "No timezone provided"}), 400 #Selects new time zone based on HTML dropdown input
+@app.route('/get_timezone_info', methods=['GET'])
+def get_timezone_info():
+    global night, sunset
+    return jsonify({
+        "night": night,
+        "sunset": sunset
+    })
+
 
 @app.route('/change', methods=['POST'])
 def change_scale():
