@@ -40,7 +40,7 @@ def get_coords(time_zone: str):
 
 
 def change_time_zone(location: str):
-    global time_zone, latitude, longitude, day, night, sunrise, sunset
+    global time_zone, latitude, longitude, day, night, sunrise, sunset, quarter
     time_zone = location
     coords = get_coords(location)
     latitude = float(coords[1])
@@ -52,6 +52,13 @@ def change_time_zone(location: str):
     sunrise = sun[6]
     sunset = sun[7]
 
+    quarter["N"]["q_s"] = sun[7]
+    quarter["N"]["q_e"] = sun[6]
+    quarter["D"]["q_s"] = sun[6]
+    quarter["D"]["q_e"] = sun[7]
+
+
+
 #Set up global timezone variables
 latitude = None
 longitude = None
@@ -61,9 +68,15 @@ night = None
 sunrise = None
 sunset = None
 
+quarter = {
+    "N": {"deg_s": 180, "deg_e": 360, "q_s": sunset, "q_e": sunrise},
+    "D": {"deg_s": 0, "deg_e": 180, "q_s": sunset, "q_e": sunrise}
+}
+
 #Load initial timezone for loal time zone
 time_zone = "local"
 change_time_zone(time_zone)
+
 
 webbrowser.open('http://localhost:5000', new=0, autoraise=True) #Otwiera dwie strony
 
@@ -77,24 +90,6 @@ time_scale_factor = 1  # 10 minutes pass in 30 seconds (10 * 60) / 30
 def index():
     return render_template('zegar.html')  # This will load the frontend HTML
 
-
-@app.route('/time', methods=['GET'])
-def get_time():
-    global time_zone
-    if time_zone == "local":
-        date = datetime.now()
-    else:
-        try:
-            tz = timezone(time_zone)
-            date = datetime.now(tz)
-        except Exception as e:
-            print(f"Invalid timezone: {time_zone}. Falling back to local.")
-            date = datetime.now()
-    return jsonify({
-        'hours': format(date, '%H'),
-        'minutes': format(date, '%M'),
-        'seconds': format(date, '%S')
-    })
 @app.route('/set_timezone', methods=['POST'])
 def set_timezone():
     global time_zone
@@ -108,10 +103,36 @@ def set_timezone():
         return jsonify({"error": "No timezone provided"}), 400 #Selects new time zone based on HTML dropdown input
 @app.route('/get_timezone_info', methods=['GET'])
 def get_timezone_info():
-    global night, sunset
+    global night, day, time_zone
+    if time_zone == "local":
+        date = datetime.now()
+    else:
+        try:
+            tz = timezone(time_zone)
+            date = datetime.now(tz)
+        except Exception as e:
+            print(f"Invalid timezone: {time_zone}. Falling back to local.")
+            date = datetime.now()
+    date_dec = int(format(date, '%H')) + int(format(date, '%M')) / 60 + int(format(date, '%S')) / 3600
+    if sunrise <= date_dec <= sunset:
+        temp = "D"
+    else:
+        temp = "N"
+    print(temp)
+    deg_start = quarter[temp]["deg_s"]
+    deg_end = quarter[temp]["deg_e"]
+    qt_start = quarter[temp]["q_s"]
+    qt_end = quarter[temp]["q_e"]
     return jsonify({
-        "night": night,
-        "sunset": sunset
+        'hours': format(date, '%H'),
+        'minutes': format(date, '%M'),
+        'seconds': format(date, '%S'),
+        "len_day": day,
+        "len_night": night,
+        "deg_start":deg_start,
+        "deg_end": deg_end,
+        "qt_start": qt_start,
+        "qt_end": qt_end
     })
 
 

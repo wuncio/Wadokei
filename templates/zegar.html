@@ -4,135 +4,28 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Analog Clock with Timezones</title>
-  <style>
-    body {
-      background: #f0f0f0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      font-family: sans-serif;
-    }
-    .timezoneSelect {
-      margin-bottom: 10px;
-      padding: 6px;
-      font-size: 16px;
-      border-radius: 6px;
-      border: 1px solid #999;
-    }
-
-    .container {
-      display: flex;
-      gap: 40px;
-      align-items: center;
-    }
-
-    .clock {
-      width: 300px;
-      height: 300px;
-      background-image: url('static/Assets/clockface.png'); /* Replace with your image path */
-      background-size: cover;
-      background-position: center;
-      border: 8px solid #333;
-      border-radius: 50%;
-      position: relative;
-    }
-    .clock-shade {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      z-index: 2;
-      pointer-events: none;
-      transform: rotate(0deg); /* We’ll rotate dynamically */
-    }
-
-    .center {
-      width: 10px;
-      height: 10px;
-      background: #333;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      border-radius: 50%;
-      z-index: 10;
-    }
-
-    .hand {
-      position: absolute;
-      bottom: 50%;
-      left: 50%;
-      transform-origin: bottom center;
-      transform: translateX(-50%) rotate(0deg);
-      border-radius: 6px;
-      background: white;
-      box-shadow: 0 0 0 2px black;
-      z-index: 5;
-    }
-
-    .hour {
-      width: 8px;
-      height: 80px;
-    }
-
-    .minute {
-      width: 4px;
-      height: 120px;
-    }
-
-    .number {
-      position: absolute;
-      width: 30px;
-      height: 30px;
-      text-align: center;
-      line-height: 30px;
-      font-weight: bold;
-      color: #333;
-      transform: translate(-50%, -50%);
-    }
-
-    .seconds-display {
-      margin-top: 20px;
-      font-size: 24px;
-      color: #333;
-      font-weight: bold;
-      text-align: center;
-    }
-
-    .timezone-panel {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      font-size: 16px;
-      background: #fff;
-      border: 2px solid #333;
-      border-radius: 8px;
-      padding: 15px;
-      box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .timezone {
-      font-family: monospace;
-    }
-  </style>
+  <link rel="stylesheet" href="static/CSS/styles.css">
 </head>
 <body>
-  <div class="container">
-    <label for="timezoneSelect">Analog Clock Timezone:</label>
-    <select id="timezoneSelect" onchange="handleTimezoneChange()">
-      <option value="local">Local Time</option>
-      <option value="America/New_York">New York</option>
-      <option value="Europe/London">London</option>
-      <option value="Asia/Tokyo">Tokyo</option>
-      <option value="Australia/Sydney">Sydney</option>
-    </select>
-    <div>
+  <div id="loadingScreen" class="hidden">
+    <div class="spinner"></div>
+    <div class="loading-text">Loading...</div>
+  </div>
+  <div class="container" id="clockApp">
+    <div class="timezone-container">
+      <label for="timezoneSelect">Analog Clock Timezone:</label>
+      <select id="timezoneSelect" class="timezoneSelect" onchange="handleTimezoneChange()">
+        <option value="local">Local Time</option>
+        <option value="America/New_York">New York</option>
+        <option value="Europe/London">London</option>
+        <option value="Asia/Tokyo">Tokyo</option>
+        <option value="Australia/Sydney">Sydney</option>
+      </select>
+    </div>
+    <div class="clock-container">
       <div class="clock" id="clock">
         <svg class="clock-shade" viewBox="0 0 100 100">
-        <path id="shadePath" fill="rgba(0, 0, 0, 0.5)" />
+          <path id="shadePath" fill="rgba(0, 0, 0, 0.5)" />
         </svg>
         <div class="hand hour" id="hourHand"></div>
         <div class="hand minute" id="minuteHand"></div>
@@ -149,126 +42,12 @@
       <div class="timezone" id="sydneyTime">Sydney: --:--:--</div>
     </div>
   </div>
-
+  <script src="static/Scripts/clock_script.js"></script>
   <script>
-  let hours = 0;
-  let minutes = 0;
-  let seconds = 0;
-  let night = 0;
-  let sunset = 0;
-
-  function updateClock() {
-    fetch('/time')
-      .then(response => response.json())
-      .then(data => {
-        // Ensure hours, minutes, and seconds are integers
-        hours = Math.floor(data.hours);
-        minutes = Math.floor(data.minutes);
-        seconds = Math.floor(data.seconds);
-      });
-    //console.log(hours)
-    //console.log(minutes)
-    //console.log(seconds)
-
-    const hourDeg = (hours % 12) * 30 + minutes * 0.5;
-    const minuteDeg = minutes * 6;
-
-    document.getElementById("hourHand").style.transform = `translateX(-50%) rotate(${hourDeg}deg)`;
-    document.getElementById("minuteHand").style.transform = `translateX(-50%) rotate(${minuteDeg}deg)`;
-    document.getElementById("secondsDisplay").textContent = `Seconds: ${seconds.toString().padStart(2, '0')}`;
-  }
-
-  function formatTime(date) {
-    return date.toLocaleTimeString('en-GB', {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false });
-  }
-
-  function describeSector(cx, cy, radius, startAngle, endAngle) {
-    const rad = Math.PI / 180;
-    const x1 = cx + radius * Math.cos(rad * startAngle);
-    const y1 = cy + radius * Math.sin(rad * startAngle);
-    const x2 = cx + radius * Math.cos(rad * endAngle);
-    const y2 = cy + radius * Math.sin(rad * endAngle);
-    const largeArcFlag = endAngle - startAngle <= 180 ? 0 : 1;
-
-    return [
-      `M ${cx} ${cy}`,
-      `L ${x1} ${y1}`,
-      `A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x2} ${y2}`,
-      'Z'
-    ].join(' ');
-  }
-
-  function setShadedSector(startHour, angleSize = 90) {
-    const startAngle = ((startHour % 12) * 30) - 90; // shift so 0h = top
-    const endAngle = startAngle + angleSize;
-
-    const path = describeSector(50, 50, 50, startAngle, endAngle); // center: 50, radius: 48
-    document.getElementById("shadePath").setAttribute("d", path);
-  }
-
-  function updateTimeDisplays() {
-    const now = new Date();
-    document.getElementById("localTime").textContent = `Local: ${formatTime(now)}`;
-
-    const nyTime = new Date(now.toLocaleString("en-US", { timeZone: "America/New_York" }));
-    const londonTime = new Date(now.toLocaleString("en-US", { timeZone: "Europe/London" }));
-    const tokyoTime = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Tokyo" }));
-    const sydneyTime = new Date(now.toLocaleString("en-US", { timeZone: "Australia/Sydney" }));
-
-    document.getElementById("nyTime").textContent = `New York: ${formatTime(nyTime)}`;
-    document.getElementById("londonTime").textContent = `London: ${formatTime(londonTime)}`;
-    document.getElementById("tokyoTime").textContent = `Tokyo: ${formatTime(tokyoTime)}`;
-    document.getElementById("sydneyTime").textContent = `Sydney: ${formatTime(sydneyTime)}`;
-    }
-
- function setTimezone() {
-    const selectedZone = document.getElementById("timezoneSelect").value;
-    return fetch('/set_timezone', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ timezone: selectedZone })
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log("Timezone updated:", data.time_zone);
-    })
-    .catch(error => {
-      console.error('Error updating timezone:', error);
-    });
-  }
-
-
-  function getTimezoneInfo(){
-    fetch('/get_timezone_info')
-    .then(response => response.json())
-    .then(data => {
-      night = data.night;
-      sunset = data.sunset;
-
-      console.log(night);
-      console.log(sunset);
-
-      nightAngle = night/24*360;
-      nightStartHour = 6-night/4;
-      setShadedSector(nightStartHour, nightAngle);
-    });
-  }
-
-  async function handleTimezoneChange() {
-    await setTimezone(); // Waits for completion
-    getTimezoneInfo();   // Runs after
-  }
-
-  setTimeout(7000);
-  setInterval(updateClock, 1000);
-  setInterval(updateTimeDisplays(), 30000)
-  handleTimezoneChange();
-  updateClock();
+  //setShadedSector(3, 180);
+  document.addEventListener('DOMContentLoaded', handleTimezoneChange);
+  setInterval(updateClock, refreshRate * 1000);
+  setInterval(updateTimeDisplays, 1000);
   </script>
 </body>
 </html>
