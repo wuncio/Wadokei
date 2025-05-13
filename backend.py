@@ -129,7 +129,7 @@ def get_timezone_info():
         'seconds': format(date, '%S'),
         "len_day": day,
         "len_night": night,
-        "deg_start":deg_start,
+        "deg_start": deg_start,
         "deg_end": deg_end,
         "qt_start": qt_start,
         "qt_end": qt_end

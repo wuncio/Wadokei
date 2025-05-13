@@ -113,17 +113,18 @@ function getTimezoneInfo(){
         q_s = data.qt_start;
         q_e = data.qt_end;
 
-        secInMinute = Math.round(((((q_e - q_s) % 24) + 24) % 24) / 12 * 60)
-
-        hourAngle = map(hours + minutes / 60, q_s, q_e, deg_s, deg_e, 24) - 90;
-        minuteAngle = map(minutes + seconds / secInMinute, 0, 60, 0, 360);
-
+        secInMinute = Math.round(((((q_e - q_s) % 24) + 24) % 24) / 12 * 60);
 
         let periodLen = (q_e >= q_s) ? q_e - q_s : (q_e - q_s) + 24;
         let periodDeg = Math.abs(deg_s - deg_e);
 
+
+        hourAngle = map(hours + minutes / 60, q_s, q_e, deg_s, deg_e, 24) - 90;
+        timePassed = map(hours + minutes / 60, q_s, q_e, 0, 1, 24);
+        minuteAngle = map(timePassed * 12 % 1, 0, 1, 0, 360);
+
         hourDelta = map(refreshRate / 3600, 0, periodLen, 0, periodDeg);
-        minuteDelta = map(refreshRate / secInMinute, 0, 60, 0, 360);
+        minuteDelta = map(refreshRate / secInMinute, 0, 60, 0, 360) ;
 
         console.log("Hour delta: " + hourDelta);
         console.log("Minute delta: " + minuteDelta);
@@ -133,6 +134,8 @@ function getTimezoneInfo(){
         console.log("Hour starting angle: " + hourAngle);
         console.log("Length of minute: " + secInMinute);
         console.log("Lenght of period: " + periodLen);
+        console.log("Share of period passed: " + timePassed);
+        console.log("Wadokei hors passed: " + timePassed*12);
     });
 }
 

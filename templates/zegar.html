@@ -45,9 +45,11 @@
   <script src="static/Scripts/clock_script.js"></script>
   <script>
   //setShadedSector(3, 180);
+  //Loads the initial timezone and clock position,
   document.addEventListener('DOMContentLoaded', handleTimezoneChange);
   setInterval(updateClock, refreshRate * 1000);
   setInterval(updateTimeDisplays, 1000);
+  setInterval(handleTimezoneChange, 15*60*1000);
   </script>
 </body>
 </html>
