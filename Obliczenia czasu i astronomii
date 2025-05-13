@@ -1,0 +1,551 @@
+from sun_rise_set import sun_set_raise 
+from datetime import datetime, timedelta
+
+######   testy dla result[0] - godz wschodu słońca w formacie datetime  (tolerancja 5 minut - można zmienić, bo nie wiem w sumie jaką przyjąć)
+
+import pytest
+
+@pytest.mark.parametrize("date, expected_hour, expected_minute", [
+    (None, 4, 44),
+    (datetime(2025, 5, 7), 4, 54),
+    (datetime(2025, 5, 13), 4, 44),
+    (datetime(2025, 6, 21), 4, 14),
+    (datetime(2025, 9, 22), 6, 22),
+    (datetime(2025, 12, 21), 7, 43),
+    (datetime(2026, 3, 20), 5, 38),
+])
+def test_sunr_datetime_waw(date, expected_hour, expected_minute):
+    date = date or datetime.now()
+
+    result = sun_set_raise("Warsaw", 52.237049, 21.017532, date)
+    actual = result[0].replace(tzinfo=None)
+    expected = datetime(date.year, date.month, date.day, expected_hour, expected_minute)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+
+@pytest.mark.parametrize("date, expected_hour, expected_minute", [
+    (datetime(2025, 5, 7), 4, 43),
+    (datetime(2025, 5, 13), 4, 37),
+    (datetime(2025, 6, 21), 4, 25),
+    (datetime(2025, 9, 22), 5, 28),
+    (datetime(2025, 12, 21), 6, 46),
+    (datetime(2026, 3, 20), 5, 45),
+])
+def test_sunr_datetime_tok(date, expected_hour, expected_minute):
+    result = sun_set_raise("Tokyo", 35.6895, 139.6917, date)
+    actual = result[0].replace(tzinfo=None)
+    expected = datetime(date.year, date.month, date.day, expected_hour, expected_minute)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+@pytest.mark.parametrize("date, expected_hour, expected_minute", [
+    (datetime(2025, 5, 7), 5, 0),
+    (datetime(2025, 5, 13), 4, 55),
+    (datetime(2025, 6, 21), 4, 43),
+    (datetime(2025, 9, 22), 5, 44),
+    (datetime(2025, 12, 21), 7, 0),
+    (datetime(2026, 3, 20), 6, 1),
+])
+
+def test_sunr_datetime_kioto(date, expected_hour, expected_minute):
+    result = sun_set_raise("Kyoto", 35.0116, 135.7681, date)
+    actual = result[0].replace(tzinfo=None)
+    expected = datetime(date.year, date.month, date.day, expected_hour, expected_minute)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+
+@pytest.mark.parametrize("date, expected_hour, expected_minute", [
+    (datetime(2025, 5, 7), 4, 59),
+    (datetime(2025, 5, 13), 4, 54),
+    (datetime(2025, 6, 21), 4, 44),
+    (datetime(2025, 9, 22), 5, 45),
+    (datetime(2025, 12, 21), 7, 0),
+    (datetime(2026, 3, 20), 5, 59),
+])
+
+def test_sunr_datetime_nara(date, expected_hour, expected_minute):
+    result = sun_set_raise("Nara", 34.6851, 135.8048, date)
+    actual = result[0].replace(tzinfo=None)
+    expected = datetime(date.year, date.month, date.day, expected_hour, expected_minute)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+@pytest.mark.parametrize("date, expected_hour, expected_minute", [
+    (datetime(2025, 5, 7), 5, 21),
+    (datetime(2025, 5, 13), 5, 11),
+    (datetime(2025, 6, 21), 4, 43),
+    (datetime(2025, 9, 22), 6, 46),
+    (datetime(2025, 12, 21), 8, 3),
+    (datetime(2026, 3, 20), 6,3),
+])
+
+def test_sunr_datetime_lon(date, expected_hour, expected_minute):
+    result = sun_set_raise("London", 51.5074, -0.1278, date)
+    actual = result[0].replace(tzinfo=None)
+    expected = datetime(date.year, date.month, date.day, expected_hour, expected_minute)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+@pytest.mark.parametrize("date, expected_hour, expected_minute", [
+    (datetime(2025, 5, 7), 5, 00),
+    (datetime(2025, 5, 13), 4, 45),
+    (datetime(2025, 6, 21), 3, 54),
+    (datetime(2025, 9, 22), 7, 4),
+    (datetime(2025, 12, 21), 9, 23),
+    (datetime(2026, 3, 20), 6,22),
+])
+
+def test_sunr_datetime_hel(date, expected_hour, expected_minute):
+    result = sun_set_raise("Helsinki", 60.1699, 24.9384, date)
+    actual = result[0].replace(tzinfo=None)
+    expected = datetime(date.year, date.month, date.day, expected_hour, expected_minute)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+
+@pytest.mark.parametrize("date, expected_hour, expected_minute", [
+    (datetime(2025, 5, 7), 6, 27),
+    (datetime(2025, 5, 13), 6, 27),
+    (datetime(2025, 6, 21), 6, 33),
+    (datetime(2025, 9, 22), 6, 22),
+    (datetime(2025, 12, 21), 6, 24),
+    (datetime(2026, 3, 20), 6,36),
+])
+
+def test_sunr_datetime_nai(date, expected_hour, expected_minute):
+    result = sun_set_raise("Nairobi", -1.2921, 36.8219, date)
+    actual = result[0].replace(tzinfo=None)
+    expected = datetime(date.year, date.month, date.day, expected_hour, expected_minute)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+
+@pytest.mark.parametrize("date, expected_hour, expected_minute", [
+    (datetime(2025, 5, 7), 5, 35),
+    (datetime(2025, 5, 13), 5, 31),
+    (datetime(2025, 6, 21), 5, 23),
+    (datetime(2025, 9, 22), 6, 9),
+    (datetime(2025, 12, 21), 7, 9),
+    (datetime(2026, 3, 20), 6,25),
+])
+
+def test_sunr_datetime_new(date, expected_hour, expected_minute):
+    result = sun_set_raise("New Delhi", 28.6139, 77.2090, date)
+    actual = result[0].replace(tzinfo=None)
+    expected = datetime(date.year, date.month, date.day, expected_hour, expected_minute)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+@pytest.mark.parametrize("date, expected_hour, expected_minute", [
+    (datetime(2025, 5, 7), 6, 45),
+    (datetime(2025, 5, 13), 6, 49),
+    (datetime(2025, 6, 21), 7, 12),
+    (datetime(2025, 9, 22), 5, 53),
+    (datetime(2025, 12, 21), 5, 45),
+    (datetime(2026, 3, 20), 7,6),
+])
+
+def test_sunr_datetime_cr(date, expected_hour, expected_minute):
+    result = sun_set_raise("Canberra", -35.2809, 149.1300, date)
+    actual = result[0].replace(tzinfo=None)
+    expected = datetime(date.year, date.month, date.day, expected_hour, expected_minute)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+
+@pytest.mark.parametrize("date, expected_hour, expected_minute", [
+    (datetime(2025, 5, 7), 5, 42),
+    (datetime(2025, 5, 13), 5, 34),
+    (datetime(2025, 6, 21), 5, 14),
+    (datetime(2025, 9, 22), 6, 50),
+    (datetime(2025, 12, 21), 7, 39),
+    (datetime(2026, 3, 20), 7, 5),
+])
+
+def test_sunr_datetime_ott(date, expected_hour, expected_minute):
+    result = sun_set_raise("Ottawa", 45.4215, -75.6972, date)
+    actual = result[0].replace(tzinfo=None)
+    expected = datetime(date.year, date.month, date.day, expected_hour, expected_minute)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+@pytest.mark.parametrize("date, expected_hour, expected_minute", [
+    (datetime(2025, 5, 7), 5, 57),
+    (datetime(2025, 5, 13), 5, 52),
+    (datetime(2025, 6, 21), 5, 42),
+    (datetime(2025, 9, 22), 6, 41),
+    (datetime(2025, 12, 21), 6, 54),
+    (datetime(2026, 3, 20), 6, 56),
+])
+
+def test_sunr_datetime_la(date, expected_hour, expected_minute):
+    result = sun_set_raise("Los Angeles", 34.0522, -118.2437, date)
+    actual = result[0].replace(tzinfo=None)
+    expected = datetime(date.year, date.month, date.day, expected_hour, expected_minute)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+@pytest.mark.parametrize("date, expected_hour, expected_minute", [
+    (datetime(2025, 5, 7), 6, 4),
+    (datetime(2025, 5, 13), 6, 2),
+    (datetime(2025, 6, 21), 5, 59),
+    (datetime(2025, 9, 22), 6, 25),
+    (datetime(2025, 12, 21), 7, 6),
+    (datetime(2026, 3, 20), 6, 40),
+])
+
+def test_sunr_datetime_mek(date, expected_hour, expected_minute):
+    result = sun_set_raise("Meksyk", 19.4326, -99.1332, date)
+    actual = result[0].replace(tzinfo=None)
+    expected = datetime(date.year, date.month, date.day, expected_hour, expected_minute)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+@pytest.mark.parametrize("date, expected_hour, expected_minute", [
+    (datetime(2025, 5, 7), 6, 15),
+    (datetime(2025, 5, 13), 6, 17),
+    (datetime(2025, 6, 21), 6, 32),
+    (datetime(2025, 9, 22), 5, 42),
+    (datetime(2025, 12, 21), 5, 4),
+    (datetime(2026, 3, 20), 5, 56),
+])
+
+def test_sunr_datetime_rio(date, expected_hour, expected_minute):
+    result = sun_set_raise("Rio de Janeiro", -22.9068, -43.1729, date)
+    actual = result[0].replace(tzinfo=None)
+    expected = datetime(date.year, date.month, date.day, expected_hour, expected_minute)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+@pytest.mark.parametrize("date, expected_hour, expected_minute", [
+    (datetime(2025, 5, 7), 7, 21),
+    (datetime(2025, 5, 13), 7, 25),
+    (datetime(2025, 6, 21), 7, 46),
+    (datetime(2025, 9, 22), 7, 31),
+    (datetime(2025, 12, 21), 6, 29),
+    (datetime(2026, 3, 20), 7, 45),
+])
+
+def test_sunr_datetime_san(date, expected_hour, expected_minute):
+    result = sun_set_raise("Santiago", -33.4489, -70.6693,  date)
+    actual = result[0].replace(tzinfo=None)
+    expected = datetime(date.year, date.month, date.day, expected_hour, expected_minute)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+@pytest.mark.parametrize("date, expected_hour, expected_minute", [
+    (datetime(2025, 5, 7), 20, 11),
+    (datetime(2025, 5, 13), 20, 21),
+    (datetime(2025, 6, 21), 21, 1),
+    (datetime(2025, 9, 22), 18, 34),
+    (datetime(2025, 12, 21), 15, 25),
+    (datetime(2026, 3, 20), 17, 48),
+])
+
+
+######   testy dla result[1] - godz zachodu słońca w formacie datetime  (tolerancja 5 minut - można zmienić, bo nie wiem w sumie jaką przyjąć)
+
+def test_suns_datetime_waw(date, expected_hour, expected_minute):
+    result = sun_set_raise("Warsaw", 52.237049, 21.017532, date)
+    actual = result[1].replace(tzinfo=None)
+    expected = datetime(date.year, date.month, date.day, expected_hour, expected_minute)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+
+@pytest.mark.parametrize("date, expected_hour, expected_minute", [
+    (datetime(2025, 5, 7), 18, 32),
+    (datetime(2025, 5, 13), 18, 37),
+    (datetime(2025, 6, 21), 19, 0),
+    (datetime(2025, 9, 22), 17, 38),
+    (datetime(2025, 12, 21), 16, 31),
+    (datetime(2026, 3, 20), 17, 52),
+])
+def test_suns_datetime_tok(date, expected_hour, expected_minute):
+    result = sun_set_raise("Tokyo", 35.6895, 139.6917, date)
+    actual = result[1].replace(tzinfo=None)
+    expected = datetime(date.year, date.month, date.day, expected_hour, expected_minute)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+@pytest.mark.parametrize("date, expected_hour, expected_minute", [
+    (datetime(2025, 5, 7), 18, 47),
+    (datetime(2025, 5, 13), 18, 51),
+    (datetime(2025, 6, 21), 19, 14),
+    (datetime(2025, 9, 22), 17, 55),
+    (datetime(2025, 12, 21), 16, 48),
+    (datetime(2026, 3, 20), 18, 8),
+])
+
+def test_suns_datetime_kioto(date, expected_hour, expected_minute):
+    result = sun_set_raise("Kyoto", 35.0116, 135.7681, date)
+    actual = result[1].replace(tzinfo=None)
+    expected = datetime(date.year, date.month, date.day, expected_hour, expected_minute)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+
+@pytest.mark.parametrize("date, expected_hour, expected_minute", [
+    (datetime(2025, 5, 7), 18, 46),
+    (datetime(2025, 5, 13), 18, 51),
+    (datetime(2025, 6, 21), 19, 13),
+    (datetime(2025, 9, 22), 17, 53),
+    (datetime(2025, 12, 21), 16, 49),
+    (datetime(2026, 3, 20), 18, 8),
+])
+
+def test_suns_datetime_nara(date, expected_hour, expected_minute):
+    result = sun_set_raise("Nara", 34.6851, 135.8048, date)
+    actual = result[1].replace(tzinfo=None)
+    expected = datetime(date.year, date.month, date.day, expected_hour, expected_minute)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+@pytest.mark.parametrize("date, expected_hour, expected_minute", [
+    (datetime(2025, 5, 7), 20, 34),
+    (datetime(2025, 5, 13), 20, 43),
+    (datetime(2025, 6, 21), 21, 21),
+    (datetime(2025, 9, 22), 18, 58),
+    (datetime(2025, 12, 21), 15, 53),
+    (datetime(2026, 3, 20), 18,13),
+])
+
+def test_suns_datetime_lon(date, expected_hour, expected_minute):
+    result = sun_set_raise("London", 51.5074, -0.1278, date)
+    actual = result[1].replace(tzinfo=None)
+    expected = datetime(date.year, date.month, date.day, expected_hour, expected_minute)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+@pytest.mark.parametrize("date, expected_hour, expected_minute", [
+    (datetime(2025, 5, 7), 21, 34),
+    (datetime(2025, 5, 13), 21, 48),
+    (datetime(2025, 6, 21), 22, 49),
+    (datetime(2025, 9, 22), 19, 19),
+    (datetime(2025, 12, 21), 15, 12),
+    (datetime(2026, 3, 20), 18,34),
+])
+
+def test_suns_datetime_hel(date, expected_hour, expected_minute):
+    result = sun_set_raise("Helsinki", 60.1699, 24.9384, date)
+    actual = result[1].replace(tzinfo=None)
+    expected = datetime(date.year, date.month, date.day, expected_hour, expected_minute)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+
+@pytest.mark.parametrize("date, expected_hour, expected_minute", [
+    (datetime(2025, 5, 7), 18, 31),
+    (datetime(2025, 5, 13), 18, 30),
+    (datetime(2025, 6, 21), 18, 35),
+    (datetime(2025, 9, 22), 18, 28),
+    (datetime(2025, 12, 21), 18, 36),
+    (datetime(2026, 3, 20), 18,43),
+])
+
+def test_suns_datetime_nai(date, expected_hour, expected_minute):
+    result = sun_set_raise("Nairobi", -1.2921, 36.8219, date)
+    actual = result[1].replace(tzinfo=None)
+    expected = datetime(date.year, date.month, date.day, expected_hour, expected_minute)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+
+@pytest.mark.parametrize("date, expected_hour, expected_minute", [
+    (datetime(2025, 5, 7), 19, 0),
+    (datetime(2025, 5, 13), 19, 3),
+    (datetime(2025, 6, 21), 19, 21),
+    (datetime(2025, 9, 22), 18, 17),
+    (datetime(2025, 12, 21), 17, 28),
+    (datetime(2026, 3, 20), 18,32),
+])
+
+def test_suns_datetime_new(date, expected_hour, expected_minute):
+    result = sun_set_raise("New Delhi", 28.6139, 77.2090, date)
+    actual = result[1].replace(tzinfo=None)
+    expected = datetime(date.year, date.month, date.day, expected_hour, expected_minute)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+@pytest.mark.parametrize("date, expected_hour, expected_minute", [
+    (datetime(2025, 5, 7), 17, 14),
+    (datetime(2025, 5, 13), 17, 9),
+    (datetime(2025, 6, 21), 16, 58),
+    (datetime(2025, 9, 22), 17, 59),
+    (datetime(2025, 12, 21), 20, 17),
+    (datetime(2026, 3, 20), 19,15),
+])
+
+def test_suns_datetime_cr(date, expected_hour, expected_minute):
+    result = sun_set_raise("Canberra", -35.2809, 149.1300, date)
+    actual = result[1].replace(tzinfo=None)
+    expected = datetime(date.year, date.month, date.day, expected_hour, expected_minute)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+
+@pytest.mark.parametrize("date, expected_hour, expected_minute", [
+    (datetime(2025, 5, 7), 20, 17),
+    (datetime(2025, 5, 13), 20, 24),
+    (datetime(2025, 6, 21), 20, 54),
+    (datetime(2025, 9, 22), 18, 59),
+    (datetime(2025, 12, 21), 16, 22),
+    (datetime(2026, 3, 20), 19, 15),
+])
+
+def test_suns_datetime_ott(date, expected_hour, expected_minute):
+    result = sun_set_raise("Ottawa", 45.4215, -75.6972, date)
+    actual = result[1].replace(tzinfo=None)
+    expected = datetime(date.year, date.month, date.day, expected_hour, expected_minute)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+@pytest.mark.parametrize("date, expected_hour, expected_minute", [
+    (datetime(2025, 5, 7), 19, 41),
+    (datetime(2025, 5, 13), 19, 46),
+    (datetime(2025, 6, 21), 20, 7),
+    (datetime(2025, 9, 22), 18, 49),
+    (datetime(2025, 12, 21), 16, 47),
+    (datetime(2026, 3, 20), 19, 4),
+])
+
+def test_suns_datetime_la(date, expected_hour, expected_minute):
+    result = sun_set_raise("Los Angeles", 34.0522, -118.2437, date)
+    actual = result[1].replace(tzinfo=None)
+    expected = datetime(date.year, date.month, date.day, expected_hour, expected_minute)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+@pytest.mark.parametrize("date, expected_hour, expected_minute", [
+    (datetime(2025, 5, 7), 19, 1),
+    (datetime(2025, 5, 13), 19, 3),
+    (datetime(2025, 6, 21), 19, 17),
+    (datetime(2025, 9, 22), 18, 33),
+    (datetime(2025, 12, 21), 18, 3),
+    (datetime(2026, 3, 20), 18, 47),
+])
+
+def test_suns_datetime_mek(date, expected_hour, expected_minute):
+    result = sun_set_raise("Meksyk", 19.4326, -99.1332, date)
+    actual = result[1].replace(tzinfo=None)
+    expected = datetime(date.year, date.month, date.day, expected_hour, expected_minute)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+@pytest.mark.parametrize("date, expected_hour, expected_minute", [
+    (datetime(2025, 5, 7), 17, 23),
+    (datetime(2025, 5, 13), 17, 20),
+    (datetime(2025, 6, 21), 17, 16),
+    (datetime(2025, 9, 22), 17, 48),
+    (datetime(2025, 12, 21), 18, 37),
+    (datetime(2026, 3, 20), 18, 3),
+])
+
+def test_suns_datetime_rio(date, expected_hour, expected_minute):
+    result = sun_set_raise("Rio de Janeiro", -22.9068, -43.1729, date)
+    actual = result[1].replace(tzinfo=None)
+    expected = datetime(date.year, date.month, date.day, expected_hour, expected_minute)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+@pytest.mark.parametrize("date, expected_hour, expected_minute", [
+    (datetime(2025, 5, 7), 17, 56),
+    (datetime(2025, 5, 13), 17, 51),
+    (datetime(2025, 6, 21), 17, 42),
+    (datetime(2025, 9, 22), 19, 39),
+    (datetime(2025, 12, 21), 20, 52),
+    (datetime(2026, 3, 20), 19, 53),
+])
+
+def test_suns_datetime_san(date, expected_hour, expected_minute):
+    result = sun_set_raise("Santiago", -33.4489, -70.6693,  date)
+    actual = result[1].replace(tzinfo=None)
+    expected = datetime(date.year, date.month, date.day, expected_hour, expected_minute)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+
+def test_sunr_datetime():
+    date = datetime(2025, 5, 7)
+    result = sun_set_raise("Warsaw", 52.237049, 21.017532, date)
+    actual = result[0].replace(tzinfo=None)  
+    expected = datetime(2025, 5, 7, 4, 54)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+def test_sunr_datetime1():
+    date = datetime(2025, 5, 13)
+    result = sun_set_raise("Warsaw", 52.237049, 21.017532, date)
+    actual = result[0].replace(tzinfo=None)  
+    expected = datetime(2025, 5, 13, 4, 44)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+
+def test_sunr_datetime2():
+    date = datetime(2025, 6, 21)
+    result = sun_set_raise("Warsaw", 52.237049, 21.017532, date)
+    actual = result[0].replace(tzinfo=None)  
+    expected = datetime(2025, 6, 21, 4, 14)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+def test_sunr_datetime3():
+    date = datetime(2025, 9, 22)
+    result = sun_set_raise("Warsaw", 52.237049, 21.017532, date)
+    actual = result[0].replace(tzinfo=None)  
+    expected = datetime(2025, 9, 22, 6, 22)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+def test_sunr_datetime4():
+    date = datetime(2025, 12, 21)
+    result = sun_set_raise("Warsaw", 52.237049, 21.017532, date)
+    actual = result[0].replace(tzinfo=None)  
+    expected = datetime(2025, 12, 21, 7, 43)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+def test_sunr_datetime5():
+    date = datetime(2026, 3, 20)
+    result = sun_set_raise("Warsaw", 52.237049, 21.017532, date)
+    actual = result[0].replace(tzinfo=None)  
+    expected = datetime(2026, 3, 20, 5, 36)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+#import pytest
+#from datetime import datetime, timedelta
+from math import isclose
+
+# Zakładamy, że masz już funkcję sun_set_raise zaimportowaną
+
+@pytest.mark.parametrize("name, lat, lon, date, expected_day_hours, expected_night_hours", [
+    # 21 grudnia w Warszawie – krótki dzień
+    ("Warsaw", 52.237049, 21.017532, datetime(2025, 12, 21), 7.7, 16.3),
+
+    # 21 czerwca w Warszawie – długi dzień
+    ("Warsaw", 52.237049, 21.017532, datetime(2025, 6, 21), 16.78, 7.22),
+
+    # Równonoc – dzień ≈ noc
+    ("Warsaw", 52.237049, 21.017532, datetime(2026, 3, 20), 12.17, 11.83),
+
+    # Lato w Tokio – bardzo długi dzień
+    ("Tokyo", 35.652832, 139.839478, datetime(2025, 6, 21), 14.58, 9.42),
+
+    # Zima w Tokio – umiarkowany dzień
+    ("Tokyo", 35.652832, 139.839478, datetime(2025, 12, 21), 9.73, 14.27),
+])
+def test_day_night_length(name, lat, lon, date, expected_day_hours, expected_night_hours):
+    result = sun_set_raise(name, lat, lon, date)
+    actual_day = result[2]
+    actual_night = result[3]
+
+    # Porównujemy z dokładnością do 0.05h
+    assert isclose(actual_day, expected_day_hours, abs_tol=0.05)
+    assert isclose(actual_night, expected_night_hours, abs_tol=0.05)
+
+    # Dodatkowo: dzień + noc ≈ 24 godziny
+    assert isclose(actual_day + actual_night, 24, abs_tol=0.01)
