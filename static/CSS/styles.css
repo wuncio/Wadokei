@@ -43,6 +43,15 @@ body {
   position: relative;
 }
 
+.clock-inner {
+  width: 100%;
+  height: 100%;
+  background-image: url('../Assets/clockinner.png');
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
 .clock-shade {
   position: absolute;
   width: 100%;
