@@ -1,5 +1,7 @@
+import pytest
 from sun_rise_set import sun_set_raise 
 from datetime import datetime, timedelta
+from math import isclose
 
 ######   testy dla result[0] - godz wschodu słońca w formacie datetime  (tolerancja 5 minut - można zmienić, bo nie wiem w sumie jaką przyjąć)
 
@@ -516,6 +518,59 @@ def test_sunr_datetime5():
     delta = abs(actual - expected)
     assert delta < timedelta(minutes=5)
 
+
+##  Długość dnia i nocy (czas zwykły) 
+
+
+def test_sunr_datetime():
+    date = datetime(2025, 5, 7)
+    result = sun_set_raise("Warsaw", 52.237049, 21.017532, date)
+    actual = result[0].replace(tzinfo=None)  
+    expected = datetime(2025, 5, 7, 4, 54)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+def test_sunr_datetime1():
+    date = datetime(2025, 5, 13)
+    result = sun_set_raise("Warsaw", 52.237049, 21.017532, date)
+    actual = result[0].replace(tzinfo=None)  
+    expected = datetime(2025, 5, 13, 4, 44)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+
+def test_sunr_datetime2():
+    date = datetime(2025, 6, 21)
+    result = sun_set_raise("Warsaw", 52.237049, 21.017532, date)
+    actual = result[0].replace(tzinfo=None)  
+    expected = datetime(2025, 6, 21, 4, 14)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+def test_sunr_datetime3():
+    date = datetime(2025, 9, 22)
+    result = sun_set_raise("Warsaw", 52.237049, 21.017532, date)
+    actual = result[0].replace(tzinfo=None)  
+    expected = datetime(2025, 9, 22, 6, 22)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+def test_sunr_datetime4():
+    date = datetime(2025, 12, 21)
+    result = sun_set_raise("Warsaw", 52.237049, 21.017532, date)
+    actual = result[0].replace(tzinfo=None)  
+    expected = datetime(2025, 12, 21, 7, 43)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+def test_sunr_datetime5():
+    date = datetime(2026, 3, 20)
+    result = sun_set_raise("Warsaw", 52.237049, 21.017532, date)
+    actual = result[0].replace(tzinfo=None)  
+    expected = datetime(2026, 3, 20, 5, 36)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
 #import pytest
 #from datetime import datetime, timedelta
 from math import isclose
@@ -549,3 +604,721 @@ def test_day_night_length(name, lat, lon, date, expected_day_hours, expected_nig
 
     # Dodatkowo: dzień + noc ≈ 24 godziny
     assert isclose(actual_day + actual_night, 24, abs_tol=0.01)
+
+
+
+
+
+#################################################
+###########################################
+
+
+@pytest.mark.parametrize("name, lat, lon, date, expected_day_hours, expected_night_hours", [
+    ("Warsaw", 52.237049, 21.017532, datetime(2025, 5, 7), 15.28, 8.72),
+    ("Warsaw", 52.237049, 21.017532, datetime(2025, 5, 13), 15.62, 8.38),
+    ("Warsaw", 52.237049, 21.017532, datetime(2026, 6, 21), 16.78, 7.21),
+    ("Warsaw", 52.237049, 21.017532, datetime(2025, 9, 22), 12.2, 11.8),
+    ("Warsaw", 52.237049, 21.017532, datetime(2025, 12, 21), 7.7, 16.3),
+    ("Warsaw", 52.237049, 21.017532, datetime(2026, 3, 20), 12.17, 11.83),
+
+])
+def test_day_night_lengthwaw(name, lat, lon, date, expected_day_hours, expected_night_hours):
+    result = sun_set_raise(name, lat, lon, date)
+    actual_day = result[2]
+    actual_night = result[3]
+
+    # Porównujemy z dokładnością do 0.05h
+    assert isclose(actual_day, expected_day_hours, abs_tol=0.05)
+    assert isclose(actual_night, expected_night_hours, abs_tol=0.05)
+
+    # Dodatkowo: dzień + noc ≈ 24 godziny
+    assert isclose(actual_day + actual_night, 24, abs_tol=0.01)
+
+
+
+
+@pytest.mark.parametrize("name, lat, lon, date, expected_day_hours, expected_night_hours", [
+    ("Tokyo", 35.6895, 139.6917, datetime(2025, 5, 7), 13.81666667, 10.18333333),
+    ("Tokyo", 35.6895, 139.6917, datetime(2025, 5, 13), 13.98333333, 10.01666667),
+    ("Tokyo", 35.6895, 139.6917, datetime(2026, 6, 21), 14.58333333, 9.416666667),
+    ("Tokyo", 35.6895, 139.6917, datetime(2025, 9, 22), 12.15, 11.85),
+    ("Tokyo", 35.6895, 139.6917, datetime(2025, 12, 21), 9.733333333, 14.26666667),
+    ("Tokyo", 35.6895, 139.6917, datetime(2026, 3, 20), 12.11666667, 11.88333333),
+])
+def test_day_night_length_tokyo(name, lat, lon, date, expected_day_hours, expected_night_hours):
+    result = sun_set_raise(name, lat, lon, date)
+    actual_day = result[2]
+    actual_night = result[3]
+
+    # Porównanie z tolerancją do 0.05h (3 minuty)
+    assert isclose(actual_day, expected_day_hours, abs_tol=0.05)
+    assert isclose(actual_night, expected_night_hours, abs_tol=0.05)
+
+    # Sprawdzenie czy suma ≈ 24h
+    assert isclose(actual_day + actual_night, 24, abs_tol=0.01)
+
+
+
+
+@pytest.mark.parametrize("name, lat, lon, date, expected_day_hours, expected_night_hours", [
+    ("Kyoto", 35.0116, 135.7681, datetime(2025, 5, 7), 13.78333333, 10.21666667),
+    ("Kyoto", 35.0116, 135.7681, datetime(2025, 5, 13), 13.95, 10.05),
+    ("Kyoto", 35.0116, 135.7681, datetime(2026, 6, 21), 14.51666667, 9.483333333),
+    ("Kyoto", 35.0116, 135.7681, datetime(2025, 9, 22), 12.15, 11.85),
+    ("Kyoto", 35.0116, 135.7681, datetime(2025, 12, 21), 9.8, 14.2),
+    ("Kyoto", 35.0116, 135.7681, datetime(2026, 3, 20), 12.1, 11.9),
+])
+def test_day_night_length_kyoto(name, lat, lon, date, expected_day_hours, expected_night_hours):
+    result = sun_set_raise(name, lat, lon, date)
+    actual_day = result[2]
+    actual_night = result[3]
+
+    # Porównanie z tolerancją do 0.05h (3 minuty)
+    assert isclose(actual_day, expected_day_hours, abs_tol=0.05)
+    assert isclose(actual_night, expected_night_hours, abs_tol=0.05)
+
+    # Sprawdzenie, czy suma ≈ 24h
+    assert isclose(actual_day + actual_night, 24, abs_tol=0.01)
+
+
+
+@pytest.mark.parametrize("name, lat, lon, date, expected_day_hours, expected_night_hours", [
+    ("Nara", 34.6851, 135.8048, datetime(2025, 5, 7), 13.76666667, 10.23333333),
+    ("Nara", 34.6851, 135.8048, datetime(2025, 5, 13), 13.93333333, 10.06666667),
+    ("Nara", 34.6851, 135.8048, datetime(2026, 6, 21), 14.48333333, 9.516666667),
+    ("Nara", 34.6851, 135.8048, datetime(2025, 9, 22), 12.15, 11.85),
+    ("Nara", 34.6851, 135.8048, datetime(2025, 12, 21), 9.816666667, 14.18333333),
+    ("Nara", 34.6851, 135.8048, datetime(2026, 3, 20), 12.13333333, 11.86666667),
+])
+def test_day_night_length_nara(name, lat, lon, date, expected_day_hours, expected_night_hours):
+    result = sun_set_raise(name, lat, lon, date)
+    actual_day = result[2]
+    actual_night = result[3]
+
+    # Porównanie z dokładnością do 0.05h
+    assert isclose(actual_day, expected_day_hours, abs_tol=0.05)
+    assert isclose(actual_night, expected_night_hours, abs_tol=0.05)
+
+    # Suma ≈ 24h
+    assert isclose(actual_day + actual_night, 24, abs_tol=0.01)
+
+
+@pytest.mark.parametrize("name, lat, lon, date, expected_day_hours, expected_night_hours", [
+    ("London", 51.5074, -0.1278, datetime(2025, 5, 7), 15.216667, 8.783333),
+    ("London", 51.5074, -0.1278, datetime(2025, 5, 13), 15.53333333, 8.466666667),
+    ("London", 51.5074, -0.1278, datetime(2026, 6, 21), 16.63333333, 7.366666667),
+    ("London", 51.5074, -0.1278, datetime(2025, 9, 22), 12.2, 11.8),
+    ("London", 51.5074, -0.1278, datetime(2025, 12, 21), 7.833333333, 16.16666667),
+    ("London", 51.5074, -0.1278, datetime(2026, 3, 20), 12.16666667, 11.83333333),
+])
+def test_day_night_length_london(name, lat, lon, date, expected_day_hours, expected_night_hours):
+    result = sun_set_raise(name, lat, lon, date)
+    actual_day = result[2]
+    actual_night = result[3]
+
+    # Porównanie z dokładnością do 0.05h
+    assert isclose(actual_day, expected_day_hours, abs_tol=0.05)
+    assert isclose(actual_night, expected_night_hours, abs_tol=0.05)
+
+    # Suma ≈ 24h
+    assert isclose(actual_day + actual_night, 24, abs_tol=0.01)
+
+@pytest.mark.parametrize("name, lat, lon, date, expected_day_hours, expected_night_hours", [
+    ("Helsinki", 60.1695, 24.9354, datetime(2025, 5, 7), 16.55, 7.45),
+    ("Helsinki", 60.1695, 24.9354, datetime(2025, 5, 13), 17.05, 6.95),
+    ("Helsinki", 60.1695, 24.9354, datetime(2026, 6, 21), 18.93333333, 5.066666667),
+    ("Helsinki", 60.1695, 24.9354, datetime(2025, 9, 22), 12.25, 11.75),
+    ("Helsinki", 60.1695, 24.9354, datetime(2025, 12, 21), 5.816666667, 18.18333333),
+    ("Helsinki", 60.1695, 24.9354, datetime(2026, 3, 20), 12.2, 11.8),
+])
+def test_day_night_length_helsinki(name, lat, lon, date, expected_day_hours, expected_night_hours):
+    result = sun_set_raise(name, lat, lon, date)
+    actual_day = result[2]
+    actual_night = result[3]
+
+    # Porównanie z dokładnością do 0.05h
+    assert isclose(actual_day, expected_day_hours, abs_tol=0.05)
+    assert isclose(actual_night, expected_night_hours, abs_tol=0.05)
+
+    # Suma ≈ 24h
+    assert isclose(actual_day + actual_night, 24, abs_tol=0.01)
+
+
+@pytest.mark.parametrize("name, lat, lon, date, expected_day_hours, expected_night_hours", [
+    ("Nairobi", -1.2921, 36.8219, datetime(2025, 5, 7), 12.05, 11.95),
+    ("Nairobi", -1.2921, 36.8219, datetime(2025, 5, 13), 12.06666667, 11.93333333),
+    ("Nairobi", -1.2921, 36.8219, datetime(2026, 6, 21), 12.05, 11.95),
+    ("Nairobi", -1.2921, 36.8219, datetime(2025, 9, 22), 12.1, 11.9),
+    ("Nairobi", -1.2921, 36.8219, datetime(2025, 12, 21), 12.2, 11.8),
+    ("Nairobi", -1.2921, 36.8219, datetime(2026, 3, 20), 12.11666667, 11.88333333),
+])
+def test_day_night_length_nairobi(name, lat, lon, date, expected_day_hours, expected_night_hours):
+    result = sun_set_raise(name, lat, lon, date)
+    actual_day = result[2]
+    actual_night = result[3]
+
+    # Porównanie z dokładnością do 0.05h
+    assert isclose(actual_day, expected_day_hours, abs_tol=0.05)
+    assert isclose(actual_night, expected_night_hours, abs_tol=0.05)
+
+    # Suma ≈ 24h
+    assert isclose(actual_day + actual_night, 24, abs_tol=0.01)
+
+
+@pytest.mark.parametrize("name, lat, lon, date, expected_day_hours, expected_night_hours", [
+    ("New Delhi", 28.6139, 77.2090, datetime(2025, 5, 7), 13.4, 10.6),
+    ("New Delhi", 28.6139, 77.2090, datetime(2025, 5, 13), 13.53333333, 10.46666667),
+    ("New Delhi", 28.6139, 77.2090, datetime(2026, 6, 21), 13.96666667, 10.03333333),
+    ("New Delhi", 28.6139, 77.2090, datetime(2025, 9, 22), 12.13333333, 11.86666667),
+    ("New Delhi", 28.6139, 77.2090, datetime(2025, 12, 21), 10.31666667, 13.68333333),
+    ("New Delhi", 28.6139, 77.2090, datetime(2026, 3, 20), 12.11666667, 11.88333333),
+])
+def test_day_night_length_newdelhi(name, lat, lon, date, expected_day_hours, expected_night_hours):
+    result = sun_set_raise(name, lat, lon, date)
+    actual_day = result[2]
+    actual_night = result[3]
+
+    # Porównanie z dokładnością do 0.05h
+    assert isclose(actual_day, expected_day_hours, abs_tol=0.05)
+    assert isclose(actual_night, expected_night_hours, abs_tol=0.05)
+
+    # Suma ≈ 24h
+    assert isclose(actual_day + actual_night, 24, abs_tol=0.01)
+
+
+@pytest.mark.parametrize("name, lat, lon, date, expected_day_hours, expected_night_hours", [
+    ("Canberra", -35.2809, 149.1300, datetime(2025, 5, 7), 10.5, 13.5),
+    ("Canberra", -35.2809, 149.1300, datetime(2025, 5, 13), 10.33333333, 13.66666667),
+    ("Canberra", -35.2809, 149.1300, datetime(2026, 6, 21), 9.766666667, 14.23333333),
+    ("Canberra", -35.2809, 149.1300, datetime(2025, 9, 22), 12.1, 11.9),
+    ("Canberra", -35.2809, 149.1300, datetime(2025, 12, 21), 14.55, 9.45),
+    ("Canberra", -35.2809, 149.1300, datetime(2026, 3, 20), 12.15, 11.85),
+])
+def test_day_night_length_canberra(name, lat, lon, date, expected_day_hours, expected_night_hours):
+    result = sun_set_raise(name, lat, lon, date)
+    actual_day = result[2]
+    actual_night = result[3]
+
+    # Porównanie z dokładnością do 0.05h
+    assert isclose(actual_day, expected_day_hours, abs_tol=0.05)
+    assert isclose(actual_night, expected_night_hours, abs_tol=0.05)
+
+    # Suma ≈ 24h
+    assert isclose(actual_day + actual_night, 24, abs_tol=0.01)
+
+
+@pytest.mark.parametrize("name, lat, lon, date, expected_day_hours, expected_night_hours", [
+    ("Ottawa", 45.4215, -75.6972, datetime(2025, 5, 7), 14.58333333, 9.416666667),
+    ("Ottawa", 45.4215, -75.6972, datetime(2025, 5, 13), 14.83333333, 9.166666667),
+    ("Ottawa", 45.4215, -75.6972, datetime(2026, 6, 21), 15.66666667, 8.333333333),
+    ("Ottawa", 45.4215, -75.6972, datetime(2025, 9, 22), 12.15, 11.85),
+    ("Ottawa", 45.4215, -75.6972, datetime(2025, 12, 21), 8.716666667, 15.28333333),
+    ("Ottawa", 45.4215, -75.6972, datetime(2026, 3, 20), 12.16666667, 11.83333333),
+])
+def test_day_night_length_ottawa(name, lat, lon, date, expected_day_hours, expected_night_hours):
+    result = sun_set_raise(name, lat, lon, date)
+    actual_day = result[2]
+    actual_night = result[3]
+
+    # Porównanie z dokładnością do 0.05h
+    assert isclose(actual_day, expected_day_hours, abs_tol=0.05)
+    assert isclose(actual_night, expected_night_hours, abs_tol=0.05)
+
+    # Suma ≈ 24h
+    assert isclose(actual_day + actual_night, 24, abs_tol=0.01)
+
+@pytest.mark.parametrize("name, lat, lon, date, expected_day_hours, expected_night_hours", [
+    ("Los Angeles", 34.0522, -118.2437, datetime(2025, 5, 7), 13.73333333, 10.26666667),
+    ("Los Angeles", 34.0522, -118.2437, datetime(2025, 5, 13), 13.9, 10.1),
+    ("Los Angeles", 34.0522, -118.2437, datetime(2026, 6, 21), 14.43333333, 9.566666667),
+    ("Los Angeles", 34.0522, -118.2437, datetime(2025, 9, 22), 12.13333333, 11.86666667),
+    ("Los Angeles", 34.0522, -118.2437, datetime(2025, 12, 21), 9.883333333, 14.11666667),
+    ("Los Angeles", 34.0522, -118.2437, datetime(2026, 3, 20), 12.13333333, 11.86666667),
+])
+def test_day_night_length_los_angeles(name, lat, lon, date, expected_day_hours, expected_night_hours):
+    result = sun_set_raise(name, lat, lon, date)
+    actual_day = result[2]
+    actual_night = result[3]
+
+    # Porównanie z dokładnością do 0.05h
+    assert isclose(actual_day, expected_day_hours, abs_tol=0.05)
+    assert isclose(actual_night, expected_night_hours, abs_tol=0.05)
+
+    # Suma ≈ 24h
+    assert isclose(actual_day + actual_night, 24, abs_tol=0.01)
+
+
+@pytest.mark.parametrize("name, lat, lon, date, expected_day_hours, expected_night_hours", [
+    ("Mexico City", 19.4326, -99.1332, datetime(2025, 5, 7), 12.95, 11.05),
+    ("Mexico City", 19.4326, -99.1332, datetime(2025, 5, 13), 13.03333333, 10.96666667),
+    ("Mexico City", 19.4326, -99.1332, datetime(2026, 6, 21), 13.3, 10.7),
+    ("Mexico City", 19.4326, -99.1332, datetime(2025, 9, 22), 12.13333333, 11.86666667),
+    ("Mexico City", 19.4326, -99.1332, datetime(2025, 12, 21), 10.95, 13.05),
+    ("Mexico City", 19.4326, -99.1332, datetime(2026, 3, 20), 12.11666667, 11.88333333),
+])
+def test_day_night_length_mexico_city(name, lat, lon, date, expected_day_hours, expected_night_hours):
+    result = sun_set_raise(name, lat, lon, date)
+    actual_day = result[2]
+    actual_night = result[3]
+
+    # Porównanie z dokładnością do 0.05h
+    assert isclose(actual_day, expected_day_hours, abs_tol=0.05)
+    assert isclose(actual_night, expected_night_hours, abs_tol=0.05)
+
+    # Suma ≈ 24h
+    assert isclose(actual_day + actual_night, 24, abs_tol=0.01)
+
+
+
+@pytest.mark.parametrize("name, lat, lon, date, expected_day_hours, expected_night_hours", [
+    ("Rio de Janeiro", -22.9068, -43.1729, datetime(2025, 5, 7), 11.13333333, 12.86666667),
+    ("Rio de Janeiro", -22.9068, -43.1729, datetime(2025, 5, 13), 11.05, 12.95),
+    ("Rio de Janeiro", -22.9068, -43.1729, datetime(2026, 6, 21), 10.73333333, 13.26666667),
+    ("Rio de Janeiro", -22.9068, -43.1729, datetime(2025, 9, 22), 12.11666667, 11.88333333),
+    ("Rio de Janeiro", -22.9068, -43.1729, datetime(2025, 12, 21), 13.55, 10.45),
+    ("Rio de Janeiro", -22.9068, -43.1729, datetime(2026, 3, 20), 12.11666667, 11.88333333),
+])
+def test_day_night_length_rio(name, lat, lon, date, expected_day_hours, expected_night_hours):
+    result = sun_set_raise(name, lat, lon, date)
+    actual_day = result[2]
+    actual_night = result[3]
+
+    # Porównanie z dokładnością do 0.05h
+    assert isclose(actual_day, expected_day_hours, abs_tol=0.05)
+    assert isclose(actual_night, expected_night_hours, abs_tol=0.05)
+
+    # Suma ≈ 24h
+    assert isclose(actual_day + actual_night, 24, abs_tol=0.01)
+
+
+@pytest.mark.parametrize("name, lat, lon, date, expected_day_hours, expected_night_hours", [
+    ("Santiago", -33.4489, -70.6693, datetime(2025, 5, 7), 10.58333333, 13.41666667),
+    ("Santiago", -33.4489, -70.6693, datetime(2025, 5, 13), 10.43333333, 13.56666667),
+    ("Santiago", -33.4489, -70.6693, datetime(2026, 6, 21), 9.933333333, 14.06666667),
+    ("Santiago", -33.4489, -70.6693, datetime(2025, 9, 22), 12.13333333, 11.86666667),
+    ("Santiago", -33.4489, -70.6693, datetime(2025, 12, 21), 14.38333333, 9.616666667),
+    ("Santiago", -33.4489, -70.6693, datetime(2026, 3, 20), 12.13333333, 11.86666667),
+])
+def test_day_night_length_santiago(name, lat, lon, date, expected_day_hours, expected_night_hours):
+    result = sun_set_raise(name, lat, lon, date)
+    actual_day = result[2]
+    actual_night = result[3]
+
+    # Porównanie z dokładnością do 0.05h
+    assert isclose(actual_day, expected_day_hours, abs_tol=0.05)
+    assert isclose(actual_night, expected_night_hours, abs_tol=0.05)
+
+    # Suma ≈ 24h
+    assert isclose(actual_day + actual_night, 24, abs_tol=0.01)
+
+
+####  Długość dnia i nocy - czas Wadokei
+
+
+@pytest.mark.parametrize("name, lat, lon, date, expected_day_hours, expected_night_hours", [
+    ("Warsaw", 52.237049, 21.017532, datetime(2025, 5, 7), 2.547, 1.453),
+    ("Warsaw", 52.237049, 21.017532, datetime(2025, 5, 13), 2.603, 1.397),
+    ("Warsaw", 52.237049, 21.017532, datetime(2026, 6, 21), 2.797, 1.203),
+    ("Warsaw", 52.237049, 21.017532, datetime(2025, 9, 22), 2.033, 1.967),
+    ("Warsaw", 52.237049, 21.017532, datetime(2025, 12, 21), 1.283, 2.717),
+    ("Warsaw", 52.237049, 21.017532, datetime(2026, 3, 20), 2.028, 1.972),
+
+])
+def test_w_lengthwaw(name, lat, lon, date, expected_day_hours, expected_night_hours):
+    result = sun_set_raise(name, lat, lon, date)
+    actual_wad_day_h = result[4]
+    actual_wad_night_h = result[5]
+
+    # Porównujemy z dokładnością do 0.05h
+    assert isclose(actual_wad_day_h, expected_day_hours, abs_tol=0.05)
+    assert isclose(actual_wad_night_h, expected_night_hours, abs_tol=0.05)
+
+    # Dodatkowo: dzień + noc ≈ 4 godziny
+    assert isclose(actual_wad_day_h + actual_wad_night_h, 4, abs_tol=0.01)
+
+
+
+
+@pytest.mark.parametrize("name, lat, lon, date, expected_day_hours, expected_night_hours", [
+    ("Tokyo", 35.6895, 139.6917, datetime(2025, 5, 7), 13.81666667/6, 10.18333333/6),
+    ("Tokyo", 35.6895, 139.6917, datetime(2025, 5, 13), 13.98333333/6, 10.01666667/6),
+    ("Tokyo", 35.6895, 139.6917, datetime(2026, 6, 21), 14.58333333/6, 9.416666667/6),
+    ("Tokyo", 35.6895, 139.6917, datetime(2025, 9, 22), 12.15/6, 11.85/6),
+    ("Tokyo", 35.6895, 139.6917, datetime(2025, 12, 21), 9.733333333/6, 14.26666667/6),
+    ("Tokyo", 35.6895, 139.6917, datetime(2026, 3, 20), 12.11666667/6, 11.88333333/6),
+])
+def test_w_lengthtok(name, lat, lon, date, expected_day_hours, expected_night_hours):
+    result = sun_set_raise(name, lat, lon, date)
+    actual_wad_day_h = result[4]
+    actual_wad_night_h = result[5]
+
+    # Porównujemy z dokładnością do 0.05h
+    assert isclose(actual_wad_day_h, expected_day_hours, abs_tol=0.05)
+    assert isclose(actual_wad_night_h, expected_night_hours, abs_tol=0.05)
+
+    # Dodatkowo: dzień + noc ≈ 4 godziny
+    assert isclose(actual_wad_day_h + actual_wad_night_h, 4, abs_tol=0.01)
+
+
+
+
+@pytest.mark.parametrize("name, lat, lon, date, expected_day_hours, expected_night_hours", [
+    ("Kyoto", 35.0116, 135.7681, datetime(2025, 5, 7), 13.78333333/6, 10.21666667/6),
+    ("Kyoto", 35.0116, 135.7681, datetime(2025, 5, 13), 13.95/6, 10.05/6),
+    ("Kyoto", 35.0116, 135.7681, datetime(2026, 6, 21), 14.51666667/6, 9.483333333/6),
+    ("Kyoto", 35.0116, 135.7681, datetime(2025, 9, 22), 12.15/6, 11.85/6),
+    ("Kyoto", 35.0116, 135.7681, datetime(2025, 12, 21), 9.8/6, 14.2/6),
+    ("Kyoto", 35.0116, 135.7681, datetime(2026, 3, 20), 12.1/6, 11.9/6),
+])
+def test_w_lengthky(name, lat, lon, date, expected_day_hours, expected_night_hours):
+    result = sun_set_raise(name, lat, lon, date)
+    actual_wad_day_h = result[4]
+    actual_wad_night_h = result[5]
+
+    # Porównujemy z dokładnością do 0.05h
+    assert isclose(actual_wad_day_h, expected_day_hours, abs_tol=0.05)
+    assert isclose(actual_wad_night_h, expected_night_hours, abs_tol=0.05)
+
+    # Dodatkowo: dzień + noc ≈ 4 godziny
+    assert isclose(actual_wad_day_h + actual_wad_night_h, 4, abs_tol=0.01)
+
+
+
+
+
+@pytest.mark.parametrize("name, lat, lon, date, expected_day_hours, expected_night_hours", [
+    ("Nara", 34.6851, 135.8048, datetime(2025, 5, 7), 13.76666667/6, 10.23333333/6),
+    ("Nara", 34.6851, 135.8048, datetime(2025, 5, 13), 13.93333333/6, 10.06666667/6),
+    ("Nara", 34.6851, 135.8048, datetime(2026, 6, 21), 14.48333333/6, 9.516666667/6),
+    ("Nara", 34.6851, 135.8048, datetime(2025, 9, 22), 12.15/6, 11.85/6),
+    ("Nara", 34.6851, 135.8048, datetime(2025, 12, 21), 9.816666667/6, 14.18333333/6),
+    ("Nara", 34.6851, 135.8048, datetime(2026, 3, 20), 12.13333333/6, 11.86666667/6),
+])
+def test_w_lengthnara(name, lat, lon, date, expected_day_hours, expected_night_hours):
+    result = sun_set_raise(name, lat, lon, date)
+    actual_wad_day_h = result[4]
+    actual_wad_night_h = result[5]
+
+    # Porównujemy z dokładnością do 0.05h
+    assert isclose(actual_wad_day_h, expected_day_hours, abs_tol=0.05)
+    assert isclose(actual_wad_night_h, expected_night_hours, abs_tol=0.05)
+
+    # Dodatkowo: dzień + noc ≈ 4 godziny
+    assert isclose(actual_wad_day_h + actual_wad_night_h, 4, abs_tol=0.01)
+
+
+
+
+@pytest.mark.parametrize("name, lat, lon, date, expected_day_hours, expected_night_hours", [
+    ("London", 51.5074, -0.1278, datetime(2025, 5, 7), 15.216667/6, 8.783333/6),
+    ("London", 51.5074, -0.1278, datetime(2025, 5, 13), 15.53333333/6, 8.466666667/6),
+    ("London", 51.5074, -0.1278, datetime(2026, 6, 21), 16.63333333/6, 7.366666667/6),
+    ("London", 51.5074, -0.1278, datetime(2025, 9, 22), 12.2/6, 11.8/6),
+    ("London", 51.5074, -0.1278, datetime(2025, 12, 21), 7.833333333/6, 16.16666667/6),
+    ("London", 51.5074, -0.1278, datetime(2026, 3, 20), 12.16666667/6, 11.83333333/6),
+])
+def test_w_lengthlon(name, lat, lon, date, expected_day_hours, expected_night_hours):
+    result = sun_set_raise(name, lat, lon, date)
+    actual_wad_day_h = result[4]
+    actual_wad_night_h = result[5]
+
+    # Porównujemy z dokładnością do 0.05h
+    assert isclose(actual_wad_day_h, expected_day_hours, abs_tol=0.05)
+    assert isclose(actual_wad_night_h, expected_night_hours, abs_tol=0.05)
+
+    # Dodatkowo: dzień + noc ≈ 4 godziny
+    assert isclose(actual_wad_day_h + actual_wad_night_h, 4, abs_tol=0.01)
+
+
+
+@pytest.mark.parametrize("name, lat, lon, date, expected_day_hours, expected_night_hours", [
+    ("Helsinki", 60.1695, 24.9354, datetime(2025, 5, 7), 16.55/6, 7.45/6),
+    ("Helsinki", 60.1695, 24.9354, datetime(2025, 5, 13), 17.05/6, 6.95/6),
+    ("Helsinki", 60.1695, 24.9354, datetime(2026, 6, 21), 18.93333333/6, 5.066666667/6),
+    ("Helsinki", 60.1695, 24.9354, datetime(2025, 9, 22), 12.25/6, 11.75/6),
+    ("Helsinki", 60.1695, 24.9354, datetime(2025, 12, 21), 5.816666667/6, 18.18333333/6),
+    ("Helsinki", 60.1695, 24.9354, datetime(2026, 3, 20), 12.2/6, 11.8/6),
+])
+def test_w_lengthhels(name, lat, lon, date, expected_day_hours, expected_night_hours):
+    result = sun_set_raise(name, lat, lon, date)
+    actual_wad_day_h = result[4]
+    actual_wad_night_h = result[5]
+
+    # Porównujemy z dokładnością do 0.05h
+    assert isclose(actual_wad_day_h, expected_day_hours, abs_tol=0.05)
+    assert isclose(actual_wad_night_h, expected_night_hours, abs_tol=0.05)
+
+    # Dodatkowo: dzień + noc ≈ 4 godziny
+    assert isclose(actual_wad_day_h + actual_wad_night_h, 4, abs_tol=0.01)
+
+
+
+
+@pytest.mark.parametrize("name, lat, lon, date, expected_day_hours, expected_night_hours", [
+    ("Nairobi", -1.2921, 36.8219, datetime(2025, 5, 7), 12.05/6, 11.95/6),
+    ("Nairobi", -1.2921, 36.8219, datetime(2025, 5, 13), 12.06666667/6, 11.93333333/6),
+    ("Nairobi", -1.2921, 36.8219, datetime(2026, 6, 21), 12.05/6, 11.95/6),
+    ("Nairobi", -1.2921, 36.8219, datetime(2025, 9, 22), 12.1/6, 11.9/6),
+    ("Nairobi", -1.2921, 36.8219, datetime(2025, 12, 21), 12.2/6, 11.8/6),
+    ("Nairobi", -1.2921, 36.8219, datetime(2026, 3, 20), 12.11666667/6, 11.88333333/6),
+])
+def test_w_lengthnai(name, lat, lon, date, expected_day_hours, expected_night_hours):
+    result = sun_set_raise(name, lat, lon, date)
+    actual_wad_day_h = result[4]
+    actual_wad_night_h = result[5]
+
+    # Porównujemy z dokładnością do 0.05h
+    assert isclose(actual_wad_day_h, expected_day_hours, abs_tol=0.05)
+    assert isclose(actual_wad_night_h, expected_night_hours, abs_tol=0.05)
+
+    # Dodatkowo: dzień + noc ≈ 4 godziny
+    assert isclose(actual_wad_day_h + actual_wad_night_h, 4, abs_tol=0.01)
+
+
+
+
+@pytest.mark.parametrize("name, lat, lon, date, expected_day_hours, expected_night_hours", [
+    ("New Delhi", 28.6139, 77.2090, datetime(2025, 5, 7), 13.4/6, 10.6/6),
+    ("New Delhi", 28.6139, 77.2090, datetime(2025, 5, 13), 13.53333333/6, 10.46666667/6),
+    ("New Delhi", 28.6139, 77.2090, datetime(2026, 6, 21), 13.96666667/6, 10.03333333/6),
+    ("New Delhi", 28.6139, 77.2090, datetime(2025, 9, 22), 12.13333333/6, 11.86666667/6),
+    ("New Delhi", 28.6139, 77.2090, datetime(2025, 12, 21), 10.31666667/6, 13.68333333/6),
+    ("New Delhi", 28.6139, 77.2090, datetime(2026, 3, 20), 12.11666667/6, 11.88333333/6),
+])
+def test_w_lengthnewd(name, lat, lon, date, expected_day_hours, expected_night_hours):
+    result = sun_set_raise(name, lat, lon, date)
+    actual_wad_day_h = result[4]
+    actual_wad_night_h = result[5]
+
+    # Porównujemy z dokładnością do 0.05h
+    assert isclose(actual_wad_day_h, expected_day_hours, abs_tol=0.05)
+    assert isclose(actual_wad_night_h, expected_night_hours, abs_tol=0.05)
+
+    # Dodatkowo: dzień + noc ≈ 4 godziny
+    assert isclose(actual_wad_day_h + actual_wad_night_h, 4, abs_tol=0.01)
+
+
+
+
+@pytest.mark.parametrize("name, lat, lon, date, expected_day_hours, expected_night_hours", [
+    ("Canberra", -35.2809, 149.1300, datetime(2025, 5, 7), 10.5/6, 13.5/6),
+    ("Canberra", -35.2809, 149.1300, datetime(2025, 5, 13), 10.33333333/6, 13.66666667/6),
+    ("Canberra", -35.2809, 149.1300, datetime(2026, 6, 21), 9.766666667/6, 14.23333333/6),
+    ("Canberra", -35.2809, 149.1300, datetime(2025, 9, 22), 12.1/6, 11.9/6),
+    ("Canberra", -35.2809, 149.1300, datetime(2025, 12, 21), 14.55/6, 9.45/6),
+    ("Canberra", -35.2809, 149.1300, datetime(2026, 3, 20), 12.15/6, 11.85/6),
+])
+def test_w_lengthcanb(name, lat, lon, date, expected_day_hours, expected_night_hours):
+    result = sun_set_raise(name, lat, lon, date)
+    actual_wad_day_h = result[4]
+    actual_wad_night_h = result[5]
+
+    # Porównujemy z dokładnością do 0.05h
+    assert isclose(actual_wad_day_h, expected_day_hours, abs_tol=0.05)
+    assert isclose(actual_wad_night_h, expected_night_hours, abs_tol=0.05)
+
+    # Dodatkowo: dzień + noc ≈ 4 godziny
+    assert isclose(actual_wad_day_h + actual_wad_night_h, 4, abs_tol=0.01)
+
+
+
+
+@pytest.mark.parametrize("name, lat, lon, date, expected_day_hours, expected_night_hours", [
+    ("Ottawa", 45.4215, -75.6972, datetime(2025, 5, 7), 14.58333333/6, 9.416666667/6),
+    ("Ottawa", 45.4215, -75.6972, datetime(2025, 5, 13), 14.83333333/6, 9.166666667/6),
+    ("Ottawa", 45.4215, -75.6972, datetime(2026, 6, 21), 15.66666667/6, 8.333333333/6),
+    ("Ottawa", 45.4215, -75.6972, datetime(2025, 9, 22), 12.15/6, 11.85/6),
+    ("Ottawa", 45.4215, -75.6972, datetime(2025, 12, 21), 8.716666667/6, 15.28333333/6),
+    ("Ottawa", 45.4215, -75.6972, datetime(2026, 3, 20), 12.16666667/6, 11.83333333/6),
+])
+def test_w_lengthott(name, lat, lon, date, expected_day_hours, expected_night_hours):
+    result = sun_set_raise(name, lat, lon, date)
+    actual_wad_day_h = result[4]
+    actual_wad_night_h = result[5]
+
+    # Porównujemy z dokładnością do 0.05h
+    assert isclose(actual_wad_day_h, expected_day_hours, abs_tol=0.05)
+    assert isclose(actual_wad_night_h, expected_night_hours, abs_tol=0.05)
+
+    # Dodatkowo: dzień + noc ≈ 4 godziny
+    assert isclose(actual_wad_day_h + actual_wad_night_h, 4, abs_tol=0.01)
+
+
+
+@pytest.mark.parametrize("name, lat, lon, date, expected_day_hours, expected_night_hours", [
+    ("Los Angeles", 34.0522, -118.2437, datetime(2025, 5, 7), 13.73333333/6, 10.26666667/6),
+    ("Los Angeles", 34.0522, -118.2437, datetime(2025, 5, 13), 13.9/6, 10.1/6),
+    ("Los Angeles", 34.0522, -118.2437, datetime(2026, 6, 21), 14.43333333/6, 9.566666667/6),
+    ("Los Angeles", 34.0522, -118.2437, datetime(2025, 9, 22), 12.13333333/6, 11.86666667/6),
+    ("Los Angeles", 34.0522, -118.2437, datetime(2025, 12, 21), 9.883333333/6, 14.11666667/6),
+    ("Los Angeles", 34.0522, -118.2437, datetime(2026, 3, 20), 12.13333333/6, 11.86666667/6),
+])
+def test_w_lengthla(name, lat, lon, date, expected_day_hours, expected_night_hours):
+    result = sun_set_raise(name, lat, lon, date)
+    actual_wad_day_h = result[4]
+    actual_wad_night_h = result[5]
+
+    # Porównujemy z dokładnością do 0.05h
+    assert isclose(actual_wad_day_h, expected_day_hours, abs_tol=0.05)
+    assert isclose(actual_wad_night_h, expected_night_hours, abs_tol=0.05)
+
+    # Dodatkowo: dzień + noc ≈ 4 godziny
+    assert isclose(actual_wad_day_h + actual_wad_night_h, 4, abs_tol=0.01)
+
+
+
+
+@pytest.mark.parametrize("name, lat, lon, date, expected_day_hours, expected_night_hours", [
+    ("Mexico City", 19.4326, -99.1332, datetime(2025, 5, 7), 12.95/6, 11.05/6),
+    ("Mexico City", 19.4326, -99.1332, datetime(2025, 5, 13), 13.03333333/6, 10.96666667/6),
+    ("Mexico City", 19.4326, -99.1332, datetime(2026, 6, 21), 13.3/6, 10.7/6),
+    ("Mexico City", 19.4326, -99.1332, datetime(2025, 9, 22), 12.13333333/6, 11.86666667/6),
+    ("Mexico City", 19.4326, -99.1332, datetime(2025, 12, 21), 10.95/6, 13.05/6),
+    ("Mexico City", 19.4326, -99.1332, datetime(2026, 3, 20), 12.11666667/6, 11.88333333/6),
+])
+def test_w_lengthmex(name, lat, lon, date, expected_day_hours, expected_night_hours):
+    result = sun_set_raise(name, lat, lon, date)
+    actual_wad_day_h = result[4]
+    actual_wad_night_h = result[5]
+
+    # Porównujemy z dokładnością do 0.05h
+    assert isclose(actual_wad_day_h, expected_day_hours, abs_tol=0.05)
+    assert isclose(actual_wad_night_h, expected_night_hours, abs_tol=0.05)
+
+    # Dodatkowo: dzień + noc ≈ 4 godziny
+    assert isclose(actual_wad_day_h + actual_wad_night_h, 4, abs_tol=0.01)
+
+
+
+
+
+@pytest.mark.parametrize("name, lat, lon, date, expected_day_hours, expected_night_hours", [
+    ("Rio de Janeiro", -22.9068, -43.1729, datetime(2025, 5, 7), 11.13333333/6, 12.86666667/6),
+    ("Rio de Janeiro", -22.9068, -43.1729, datetime(2025, 5, 13), 11.05/6, 12.95/6),
+    ("Rio de Janeiro", -22.9068, -43.1729, datetime(2026, 6, 21), 10.73333333/6, 13.26666667/6),
+    ("Rio de Janeiro", -22.9068, -43.1729, datetime(2025, 9, 22), 12.11666667/6, 11.88333333/6),
+    ("Rio de Janeiro", -22.9068, -43.1729, datetime(2025, 12, 21), 13.55/6, 10.45/6),
+    ("Rio de Janeiro", -22.9068, -43.1729, datetime(2026, 3, 20), 12.11666667/6, 11.88333333/6),
+])
+def test_w_lengthrio(name, lat, lon, date, expected_day_hours, expected_night_hours):
+    result = sun_set_raise(name, lat, lon, date)
+    actual_wad_day_h = result[4]
+    actual_wad_night_h = result[5]
+
+    # Porównujemy z dokładnością do 0.05h
+    assert isclose(actual_wad_day_h, expected_day_hours, abs_tol=0.05)
+    assert isclose(actual_wad_night_h, expected_night_hours, abs_tol=0.05)
+
+    # Dodatkowo: dzień + noc ≈ 4 godziny
+    assert isclose(actual_wad_day_h + actual_wad_night_h, 4, abs_tol=0.01)
+
+
+
+
+@pytest.mark.parametrize("name, lat, lon, date, expected_day_hours, expected_night_hours", [
+    ("Santiago", -33.4489, -70.6693, datetime(2025, 5, 7), 10.58333333/6, 13.41666667/6),
+    ("Santiago", -33.4489, -70.6693, datetime(2025, 5, 13), 10.43333333/6, 13.56666667/6),
+    ("Santiago", -33.4489, -70.6693, datetime(2026, 6, 21), 9.933333333/6, 14.06666667/6),
+    ("Santiago", -33.4489, -70.6693, datetime(2025, 9, 22), 12.13333333/6, 11.86666667/6),
+    ("Santiago", -33.4489, -70.6693, datetime(2025, 12, 21), 14.38333333/6, 9.616666667/6),
+    ("Santiago", -33.4489, -70.6693, datetime(2026, 3, 20), 12.13333333/6, 11.86666667/6),
+])
+def test_w_lengthsan(name, lat, lon, date, expected_day_hours, expected_night_hours):
+    result = sun_set_raise(name, lat, lon, date)
+    actual_wad_day_h = result[4]
+    actual_wad_night_h = result[5]
+
+    # Porównujemy z dokładnością do 0.05h
+    assert isclose(actual_wad_day_h, expected_day_hours, abs_tol=0.05)
+    assert isclose(actual_wad_night_h, expected_night_hours, abs_tol=0.05)
+
+    # Dodatkowo: dzień + noc ≈ 4 godziny
+    assert isclose(actual_wad_day_h + actual_wad_night_h, 4, abs_tol=0.01)
+
+
+##  value/type error
+
+
+
+@pytest.mark.parametrize("date, expected_hour, expected_minute", [
+    (datetime(2025, 5, 7), 20, 11),
+    (datetime(2025, 5, 13), 20, 21),
+    (datetime(2025, 6, 21), 21, 1),
+    (datetime(2025, 9, 22), 18, 34),
+    (datetime(2025, 12, 21), 15, 25),
+    (datetime(2026, 3, 20), 17, 48),
+])
+
+
+
+def test_suns_datetime_waw(date, expected_hour, expected_minute):
+    result = sun_set_raise("Warsaw", 552.237049, 21.017532, date)
+    actual = result[1].replace(tzinfo=None)
+    expected = datetime(date.year, date.month, date.day, expected_hour, expected_minute)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+
+@pytest.mark.parametrize("date, expected_hour, expected_minute", [
+    (datetime(2025, 5, 7), 18, 32),
+    (datetime(2025, 5, 13), 18, 37),
+    (datetime(2025, 6, 21), 19, 0),
+    (datetime(2025, 9, 22), 17, 38),
+    (datetime(2025, 12, 21), 16, 31),
+    (datetime(2026, 3, 20), 17, 52),
+])
+def test_suns_datetime_tok(date, expected_hour, expected_minute):
+    result = sun_set_raise("Tokyo", 53.6895, 139.6917, date)
+    actual = result[1].replace(tzinfo=None)
+    expected = datetime(date.year, date.month, date.day, expected_hour, expected_minute)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+
+@pytest.mark.parametrize("date, expected_hour, expected_minute", [
+    (datetime(2025, 5, 7), 5, 0),
+    (datetime(2025, 5, 13), 4, 55),
+    (datetime(2025, 6, 21), 4, 43),
+    (datetime(2025, 9, 22), 5, 44),
+    (datetime(2025, 12, 21), 7, 0),
+    (datetime(2026, 3, 20), 6, 1),
+])
+
+def test_sunr_datetime_kioto(date, expected_hour, expected_minute):
+    result = sun_set_raise("Kyoto", "35.0116", 135.7681, date)
+    actual = result[0].replace(tzinfo=None)
+    expected = datetime(date.year, date.month, date.day, expected_hour, expected_minute)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+@pytest.mark.parametrize("date, expected_hour, expected_minute", [
+    (datetime(2025, 5, 7), 5, 21),
+    (datetime(2025, 5, 13), 5, 11),
+    (datetime(2025, 6, 21), 4, 43),
+    (datetime(2025, 9, 22), 6, 46),
+    (datetime(2025, 12, 21), 8, 3),
+    (datetime(2026, 3, 20), 6,3),
+])
+
+def test_sunr_datetime_lon(date, expected_hour, expected_minute):
+    result = sun_set_raise("London", 51.5074, date)
+    actual = result[0].replace(tzinfo=None)
+    expected = datetime(date.year, date.month, date.day, expected_hour, expected_minute)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
+
+@pytest.mark.parametrize("date, expected_hour, expected_minute", [
+    (datetime(2025, 5, 7), 5, 00),
+    (datetime(2025, 5, 13), 4, 45),
+    (datetime(2025, 6, 21), 3, 54),
+    (datetime(2025, 9, 22), 7, 4),
+    (datetime(2025, 12, 21), 9, 23),
+    (datetime(2026, 3, 20), 6,22),
+])
+
+def test_sunr_datetime_hel(date, expected_hour, expected_minute):
+    result = sun_set_raise("Helsinki", 60.1699, "Hel", date)
+    actual = result[0].replace(tzinfo=None)
+    expected = datetime(date.year, date.month, date.day, expected_hour, expected_minute)
+    delta = abs(actual - expected)
+    assert delta < timedelta(minutes=5)
