@@ -2,6 +2,7 @@ from astral import LocationInfo
 from astral.sun import sun
 from datetime import datetime, timedelta
 import timezonefinder, pytz
+import datetime as dat
 from geopy.geocoders import Nominatim
 
 
@@ -39,6 +40,7 @@ def sun_set_raise(name, latitude, longitude):
     timezone_str = tf.certain_timezone_at(lat=latitude, lng=longitude)
     timezone = pytz.timezone(timezone_str)
     date = datetime.now()
+    days_past = datetime.now(timezone).date() - dat.date(datetime.now(timezone).date().year, 1, 1)
 
     place = LocationInfo(city, country, timezone_str, latitude, longitude)
 
@@ -76,4 +78,4 @@ def sun_set_raise(name, latitude, longitude):
     sunset_dec = int(h) + int(m) / 60 + int(s) / 3600
     print(sunset_dec)
 
-    return [sunrise, sunset, sun_hours, moon_hours, sun_hours_wadokei, moon_hours_wadokei, sunrise_dec, sunset_dec]
+    return [sunrise, sunset, sun_hours, moon_hours, sun_hours_wadokei, moon_hours_wadokei, sunrise_dec, sunset_dec, days_past.days]

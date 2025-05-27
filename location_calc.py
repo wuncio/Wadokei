@@ -22,7 +22,9 @@ def lat_long(name):
         try:
             geolocator = Nominatim(user_agent='myapp')
             location = geolocator.geocode(name, language="pl")
+            print(2, location)
         except GeocoderUnavailable:
+            print(1)
             return 1
 
         if location is None:
