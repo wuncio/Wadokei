@@ -1301,7 +1301,7 @@ def test_sunr_datetime_kioto(date, expected_hour, expected_minute):
 ])
 
 def test_sunr_datetime_lon(date, expected_hour, expected_minute):
-    result = sun_set_raise("London", 51.5074, date)
+    result = sun_set_raise("London", 51.5074, ,date)
     actual = result[0].replace(tzinfo=None)
     expected = datetime(date.year, date.month, date.day, expected_hour, expected_minute)
     delta = abs(actual - expected)
