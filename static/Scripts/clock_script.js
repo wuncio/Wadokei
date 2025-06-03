@@ -177,11 +177,12 @@ startClockRotation();
 
 
 function addCustomTimezone() {
-    const input = document.getElementById("customTimezone");
+    const input = document.getElementById("customTimezoneField");
     const select = document.getElementById("timezoneSelect");
     const customValue = input.value.trim();
 
     if (customValue && ![...select.options].some(opt => opt.value === customValue)) {
+        document.getElementById("customTimezoneField").value = "";
         const option = document.createElement("option");
         option.value = customValue;
         option.textContent = customValue;
