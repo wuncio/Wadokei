@@ -4,12 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Analog Clock with Timezones</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="static/CSS/styles.css">
 </head>
 <body>
   <div id="loadingScreen" class="hidden">
     <div class="spinner"></div>
-    <div class="loading-text">Loading...</div>
+    <div class="loading-text">Spieszy Ci się? Ups...</div>
   </div>
   <div class="container" id="clockApp">
     <div class="timezone-container">
@@ -21,7 +22,7 @@
         <option value="Asia/Tokyo">Tokyo</option>
         <option value="Australia/Sydney">Sydney</option>
       </select>
-      <label for="customTimezoneField">Type your location:</label>
+      <label for="customTimezoneField" style="margin-top: 20px;">Type your location:</label>
       <input type="text" id="customTimezoneField" placeholder="Wpisz własną strefę"/>
       <button id="customTimezoneButton" onclick="addCustomTimezone()">Confirm custom timezone</button>
     </div>
@@ -48,12 +49,22 @@
   </div>
   <script src="static/Scripts/clock_script.js"></script>
   <script>
-  //setShadedSector(3, 180);
-  //Loads the initial timezone and clock position,
-  document.addEventListener('DOMContentLoaded', handleTimezoneChange);
-  setInterval(updateClock, refreshRate * 1000);
-  setInterval(updateTimeDisplays, 1000);
-  setInterval(handleTimezoneChange, 15*60*1000);
+  document.addEventListener('DOMContentLoaded', async () => {
+
+    await getLastTimezone();
+
+    // Step 2: Call handleTimezoneChange once
+    handleTimezoneChange(false);
+
+    // Step 3: Repeat every 15 minutes
+    setInterval(() => handleTimezoneChange(false), 15 * 60 * 1000);
+
+    // Step 5: Update the clock every refreshRate * 1000 milliseconds
+    setInterval(updateClock, refreshRate * 1000);
+
+    // Step 6: Update the time displays every second
+    setInterval(updateTimeDisplays, 1000);
+  });
   </script>
 </body>
 </html>

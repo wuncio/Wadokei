@@ -41,30 +41,6 @@ function formatTime(date) {
     return date.toLocaleTimeString('en-GB', {hour12: false});
 }
 
-function describeSector(cx, cy, radius, startAngle, endAngle) {
-    const rad = Math.PI / 180;
-    const x1 = cx + radius * Math.cos(rad * startAngle);
-    const y1 = cy + radius * Math.sin(rad * startAngle);
-    const x2 = cx + radius * Math.cos(rad * endAngle);
-    const y2 = cy + radius * Math.sin(rad * endAngle);
-    const largeArcFlag = endAngle - startAngle <= 180 ? 0 : 1;
-
-    return [
-      `M ${cx} ${cy}`,
-      `L ${x1} ${y1}`,
-      `A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x2} ${y2}`,
-      'Z'
-    ].join(' ');
-}
-
-function setShadedSector(startHour, angleSize = 90) {
-    const startAngle = ((startHour % 12) * 30) - 90; // shift so 0h = top
-    const endAngle = startAngle + angleSize;
-
-    const path = describeSector(50, 50, 50, startAngle, endAngle); // center: 50, radius: 48
-    document.getElementById("shadePath").setAttribute("d", path);
-}
-
 function updateTimeDisplays() {
     const now = new Date();
     document.getElementById("localTime").textContent = `Local: ${formatTime(now)}`;
@@ -194,7 +170,7 @@ function addCustomTimezone() {
 
 
     // Your function here
-async function handleTimezoneChange() {
+async function handleTimezoneChange(showFlames = true) {
     // Zapisz wybraną strefę czasową do localStorage
     const selectedTimezone = document.getElementById("timezoneSelect").value;
     localStorage.setItem("selectedTimezone", selectedTimezone);
@@ -207,14 +183,63 @@ async function handleTimezoneChange() {
 
     document.getElementById("loadingScreen").classList.add("hidden");
     document.getElementById("clockApp").classList.remove("hidden");
+
+    console.log("Timezone change handled!");
+    if(showFlames){
+        showFlamingText();
+    }
 }
 
+async function getLastTimezone(){
+  const select = document.getElementById('timezoneSelect');
+
+  try {
+    const response = await fetch('/get_last_timezone');
+    const data = await response.json();
+
+    if (data.timezone) {
+      let found = false;
+      for (const option of select.options) {
+        if (option.value === data.timezone) {
+          found = true;
+          option.selected = true;
+          break;
+        }
+      }
+      if (!found) {
+        const newOption = document.createElement('option');
+        newOption.value = data.timezone;
+        newOption.textContent = data.timezone;
+        newOption.selected = true;
+        select.appendChild(newOption);
+      }
+      console.log("Timezone from file read: " + data.timezone);
+    }
+  } catch (error) {
+    console.error('Failed to load timezone from file:', error);
+  }
+}
+
+/*
 document.addEventListener("DOMContentLoaded", () => {
     const savedTimezone = localStorage.getItem("selectedTimezone");
     const select = document.getElementById("timezoneSelect");
 
     if (savedTimezone && select) {
         select.value = savedTimezone;
-        handleTimezoneChange();
+        //handleTimezoneChange();
     }
 });
+*/
+
+function showFlamingText(message = "🔥 Strefa czasowa wybrana! 🔥", duration = 5000) {
+  const flame = document.createElement('div');
+  flame.className = 'flaming-text';
+  flame.textContent = message;
+
+  document.body.appendChild(flame);
+
+  setTimeout(() => {
+    flame.remove();
+  }, duration);
+}

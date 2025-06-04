@@ -1,0 +1,59 @@
+Wstęp:
+Całość aplikacji działa na tickach - interwałach czasowych, 
+w których wykonują się poszczególne odświeżenia aplikacji i zegara.
+Domyślnie 1 tick to 0,05 sekundy (20 ticków na sekundę).
+
+Informacje są pobierane z backendu tylko kiedy wczytywana jest nowa strefa czasowa.
+Na tej podstawie obliczane są informacje, na podstawie których będzie działał zegar.
+
+Pobierane są:
+- Godzina początku aktualnej pory doby
+	+ godzina zachodu słońca jeśli aktualnie jest noc
+	+ godzina wschodu słońca jeśli aktualnie jest dzień
+
+- Godzina początku aktualnej pory doby
+	+ godzina zachodu słońca jeśli aktualnie jest dzień
+	+ godzina wschodu słońca jeśli aktualnie jest noc
+
+-Długość trwania dnia i nocy
+
+-Obecną godzinę, minutę i sekundę
+
+-Kąty początkowe i końcowe drogi wskazówki
+	+ 0, 180 jeśli jest dzień
+	+ 180, 360 jeśli jest noc
+
+Na tej podstawie obliczane są późniejsze parametry pracy zegara 
+do momentu kolejnego oświeżenia. Wyświetlane są one na konsolce w HTML.
+
+Objaśnienie:
+* Timezone updated: <<nazwa>> - komunikat informujący o udanej zmianie strefy czasowej na nową.
+
+* Hour delta: <<liczba>> - kąt o jaki wskazówka godzinowa obraca się w każdym ticku 
+			   aby utrzymać odpowiednie tempo poruszania się, podane w stopniach
+
+* Minute delta: <<liczba>> - kąt o jaki wskazówka minutowa obraca się w każdym ticku 
+			     aby utrzymać odpowiednie tempo poruszania się, podane w stopniach
+
+*Start hour: <<liczba>> - godzina rozpoczęcia bieżącej pory doby: godzina wschodu słońca dla dnia
+			  i zachodu słońca dla nocy, podane w formie ułamka
+
+
+*End hour: <<liczba>> - godzina zakończenia bieżącej pory doby: godzina zachodu słońca dla dnia
+			i wschodu słońca dla nocy, podane w formie ułamka
+
+*<<HH:MM:SS>> - godzian w wybranej strefie czasowej w momencie dokania zmiany, podana w klasycznym formacie
+
+*Hour starting angle: <<liczba>> - kąt nachylenia wskazówki godzinowej pod którym jest ona 
+				   wczytana na zegarze po zmianie strefy; 0/360 stopni na godzinie 12,
+				   rotacja zgodnie z ruchem wskazówek zegara, podane w stopniach
+
+*Length of minute <<liczba>> - liczba sekund w minucie Wadokeiowej, dostosowana do długości pory dnia tak, aby
+			       12 godzin x 60 minut miało odpowiednią długość
+
+*Share of period passed: <<liczba>> - ułamek bieżącej pory doby (dnia/nocy), który już upłynął w momencie 
+				      zmiany strefy czasowej, wartości 0-1; bliskie 0 oznacza początek 
+				      dnia/nocy słonecznej, bliskie 1 oznacza końcówkę dnia/nocy słonecznej
+
+*Wadokei hours passed: <<liczba>> - podaje liczbę godzin godzin Wadoekiowych, które już minęły w danej porze doby;
+				    wartości od 0 do 12, podane w ułamku
