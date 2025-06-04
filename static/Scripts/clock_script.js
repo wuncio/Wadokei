@@ -172,16 +172,14 @@ function startClockRotation() {
     });
 }
 
-// Wywołaj funkcję tylko raz, np. po załadowaniu strony
-startClockRotation();
-
 
 function addCustomTimezone() {
-    const input = document.getElementById("customTimezone");
+    const input = document.getElementById("customTimezoneField");
     const select = document.getElementById("timezoneSelect");
     const customValue = input.value.trim();
 
     if (customValue && ![...select.options].some(opt => opt.value === customValue)) {
+        document.getElementById("customTimezoneField").value = "";
         const option = document.createElement("option");
         option.value = customValue;
         option.textContent = customValue;
@@ -189,6 +187,23 @@ function addCustomTimezone() {
         select.value = customValue;
         handleTimezoneChange();
     }
+    // dodane
+    let savedTimezones = JSON.parse(localStorage.getItem("recentTimezones")) || [];
+    // usuń jeśli jest, żeby nie duplikować
+    savedTimezones = savedTimezones.filter(tz => tz !== customValue);
+    // dodaj na początek
+    savedTimezones.unshift(customValue);
+    // ogranicz do 5
+    savedTimezones = savedTimezones.slice(0, 5);
+    // zapisz z powrotem
+    localStorage.setItem("recentTimezones", JSON.stringify(savedTimezones));
+
+    // ustaw wybraną wartość i zapisz ostatnio wybraną
+    select.value = customValue;
+    localStorage.setItem("selectedTimezone", customValue);
+
+    handleTimezoneChange();
+    // dodane
 }
 
 
@@ -203,6 +218,7 @@ async function handleTimezoneChange() {
 
     await setTimezone();
     getTimezoneInfo();
+    startClockRotation();
 
     document.getElementById("loadingScreen").classList.add("hidden");
     document.getElementById("clockApp").classList.remove("hidden");
@@ -216,4 +232,27 @@ document.addEventListener("DOMContentLoaded", () => {
         select.value = savedTimezone;
         handleTimezoneChange();
     }
+    // dodane
+    const savedTimezones = JSON.parse(localStorage.getItem("recentTimezones")) || [];
+    savedTimezones.forEach(tz => {
+        if (![...select.options].some(opt => opt.value === tz)) {
+            const option = document.createElement("option");
+            option.value = tz;
+            option.textContent = tz;
+            select.appendChild(option);
+        }
+    });
+
+    if (savedTimezones.length > 0) {
+        select.value = savedTimezones[0];
+        if (input) input.value = savedTimezones[0];
+        handleTimezoneChange();
+    }else {
+        select.value = savedTimezone;
+        if (input) {
+            input.value = savedTimezone;
+        }
+        handleTimezoneChange();
+    }
+    // dodane
 });

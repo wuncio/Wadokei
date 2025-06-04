@@ -1,5 +1,5 @@
 from sys import exit
-from sun_rise_set import sun_set_raise
+from sun_rise_set import location_eph
 from location_calc import lat_long
 import ipapi
 
@@ -18,13 +18,15 @@ if name == "1":
 else:
     place = name
 
-coords = lat_long(place)
+sun = location_eph(name)
+print(sun)
+"""
 if coords == 0:
     print("Podana lokalizacja nie może zostać wyszukana")
 elif coords == 1:
     print("Brak internetu")
 else:
-    print(coords[0])
+    print(coords)
     latitude = float(coords[1])
     longitude = float(coords[2])
     sun = sun_set_raise(name, latitude, longitude)
@@ -39,3 +41,4 @@ else:
         print("Długość nocy (w godz):", 24 - sun[3] / 2)
         print("Długość godziny dziennej (wadoke):", sun[4])
         print("Długość godziny nocnej (wadoke):", sun[5])
+"""

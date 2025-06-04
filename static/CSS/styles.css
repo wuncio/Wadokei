@@ -140,7 +140,37 @@ body {
   margin-bottom: 20px;
 }
 
+/*
 .timezoneSelect {
+  margin-top: 10px;
+  padding: 6px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #999;
+}
+*/
+
+.timezoneSelect,
+#customTimezoneField,
+#customTimezoneButton {
+  margin-top: 10px;
+  padding: 6px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #999;
+}
+
+#customTimezoneButton {
+  background-color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#customTimezoneButton:hover {
+  background-color: #e0e0e0;
+}
+
+.customTimezoneField {
   margin-top: 10px;
   padding: 6px;
   font-size: 16px;
