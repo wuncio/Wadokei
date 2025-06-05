@@ -53,7 +53,10 @@ def location_eph(name):
     print("---------------------------------------")
     date = datetime.now()
     timezone = pytz.timezone(timezone_str)
-    days_past = datetime.now(timezone).date() - dat.date(datetime.now(timezone).date().year, 1, 1)
+    if int(format(datetime.now(timezone).date(), "%m")) == 12 and int(format(datetime.now(timezone).date(), "%d")) >= 7:
+        days_past = datetime.now(timezone).date() - dat.date(datetime.now(timezone).date().year, 12, 7)
+    else:
+        days_past = datetime.now(timezone).date() - dat.date(datetime.now(timezone).date().year-1, 12, 7)
 
     place = LocationInfo(city, country, timezone_str, latitude, longitude)
 
