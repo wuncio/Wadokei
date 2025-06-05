@@ -1,7 +1,9 @@
 html, body {
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
 }
 
 body {
@@ -11,7 +13,12 @@ body {
   align-items: center;
   height: 100vh;
   margin: 0;
-  font-family: sans-serif;
+  font-family: 'Quicksand', sans-serif;
+}
+
+label {
+  font-family: 'Quicksand', sans-serif;
+  font-weight: bold;
 }
 
 .timezoneSelect {
@@ -24,12 +31,25 @@ body {
 
 .container {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   gap: 40px;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
   max-width: 1200px;
   margin: auto;
+}
+
+@media (min-width: 768px) {
+  .container {
+    flex-direction: row;
+    align-items: flex-start;/* Horizontal layout on medium+ screens */
+  }
+}
+
+.clock, .timezone-panel{
+  width: 100%;
+  max-width: 300px;
+  box-sizing: border-box;
 }
 
 .clock {
@@ -131,6 +151,7 @@ body {
 
 .timezone {
   font-family: monospace;
+  font-weight: 500;
 }
 
 .timezone-container {
@@ -139,16 +160,6 @@ body {
   align-items: center;
   margin-bottom: 20px;
 }
-
-/*
-.timezoneSelect {
-  margin-top: 10px;
-  padding: 6px;
-  font-size: 16px;
-  border-radius: 6px;
-  border: 1px solid #999;
-}
-*/
 
 .timezoneSelect,
 #customTimezoneField,
@@ -164,6 +175,7 @@ body {
   background-color: #ffffff;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  width: 150px;
 }
 
 #customTimezoneButton:hover {
@@ -223,4 +235,32 @@ body {
   font-size: 24px;
   color: #333;
   font-weight: bold;
+}
+
+
+.flaming-text {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 20px 40px;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #fff;
+  background: linear-gradient(0deg, #ff4500, #ff8c00, #ffff00);
+  border-radius: 10px;
+  text-shadow: 0 0 10px #ff4500, 0 0 20px #ff8c00;
+  animation: flicker 1s infinite alternate;
+  z-index: 9999;
+}
+
+@keyframes flicker {
+  from {
+    opacity: 1;
+    text-shadow: 0 0 5px #ff4500, 0 0 15px #ff8c00;
+  }
+  to {
+    opacity: 0.8;
+    text-shadow: 0 0 10px #ff0000, 0 0 30px #ffff00;
+  }
 }
