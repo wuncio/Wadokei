@@ -58,11 +58,19 @@ quarter = {
     "D": {"deg_s": 0, "deg_e": 180, "q_s": sunset, "q_e": sunrise}
 }
 
-dates_prz = {
-    "PZ": {"k_s": 0 - 58.8, "d": 89, "d_sum": 89, "d_p": 0},
-    "RW": {"k_s": 90 - 58.8, "d": 93, "d_sum": 182, "d_p": 89},
-    "PL": {"k_s": 180 - 58.8, "d": 93, "d_sum": 275, "d_p": 182},
-    "RJ": {"k_s": 270 - 58.8, "d": 90, "d_sum": 365, "d_p": 275}
+dates_zodiak = {
+    "rat": {"k_s": 0 - 58.8 - 15, "d": 30, "d_sum": 30, "d_p": 0},
+    "ox": {"k_s": 30 - 58.8 - 15, "d": 29, "d_sum": 59, "d_p": 30},
+    "tiger": {"k_s": 60 - 58.8 - 15, "d": 30, "d_sum": 89, "d_p": 59},
+    "rabbit": {"k_s": 90 - 58.8 - 15, "d": 29, "d_sum": 119, "d_p": 89},
+    "dragon": {"k_s": 120 - 58.8 - 15, "d": 32, "d_sum": 150, "d_p": 119},
+    "snake": {"k_s": 150 - 58.8 - 15, "d": 31, "d_sum": 181, "d_p": 150},
+    "horse": {"k_s": 180 - 58.8 - 15, "d": 31, "d_sum": 212, "d_p": 181},
+    "goat": {"k_s": 210 - 58.8 - 15, "d": 32, "d_sum": 244, "d_p": 212},
+    "monkey": {"k_s": 240 - 58.8 - 15, "d": 31, "d_sum": 275, "d_p": 244},
+    "rooster": {"k_s": 270 - 58.8 - 15, "d": 30, "d_sum": 305, "d_p": 275},
+    "dog": {"k_s": 300 - 58.8 - 15, "d": 30, "d_sum": 335, "d_p": 305},
+    "pig": {"k_s": 330 - 58.8 - 15, "d": 30, "d_sum": 365, "d_p": 335}
 }
 
 
@@ -184,17 +192,34 @@ def get_timezone_info():
 
 @app.route('/check_date', methods=['GET'])
 def check_date():
-    if 0 <= days < 89:
-        temp = "PZ"
-    elif 89 <= days < 182:
-        temp = "RW"
-    elif 182 <= days < 275:
-        temp = "PS"
+    if 0 <= days < 30:
+        temp = "rat"
+    elif 30 <= days < 59:
+        temp = "ox"
+    elif 59 <= days < 89:
+        temp = "tiger"
+    elif 89 <= days < 119:
+        temp = "rabbit"
+    elif 119 <= days < 150:
+        temp = "dragon"
+    elif 150 <= days < 181:
+        temp = "snake"
+    elif 181 <= days < 212:
+        temp = "horse"
+    elif 212 <= days < 244:
+        temp = "goat"
+    elif 244 <= days < 275:
+        temp = "monkey"
+    elif 275 <= days < 305:
+        temp = "rooster"
+    elif 305 <= days < 335:
+        temp = "dog"
     else:
-        temp = "RJ"
+        temp = "pig"
+    print(temp, dates_zodiak[temp]["d_sum"] - days, dates_zodiak[temp]["k_s"] + 30 * (days - dates_zodiak[temp]["d_p"]) / dates_zodiak[temp]["d"])
     return jsonify({
-        "days": dates_prz[temp]["d_sum"] - days,
-        "angle": dates_prz[temp]["k_s"] + 90 * (days - dates_prz[temp]["d_p"]) / dates_prz[temp]["d"]
+        "days": dates_zodiak[temp]["d_sum"] - days,
+        "angle": dates_zodiak[temp]["k_s"] + 30 * (days - dates_zodiak[temp]["d_p"]) / dates_zodiak[temp]["d"]
     })
 
 
