@@ -158,7 +158,7 @@ function startClockRotation() {
       const D = data.days;
 
       // Oblicz kąt obrotu na sekundę
-      anglePerSecond = 90 / (D * 24 * 60 * 60);
+      anglePerSecond = 30 / (D * 24 * 60 * 60);
 
       // Rozpocznij obracanie co sekundę
       setInterval(() => {
