@@ -1,8 +1,0 @@
-Linijki od 163 do 172 w pliku backend_test.py służy do testowania godziny
-W linijce 163 ustawia się wybraną datę wpisując kolejno w funkcji datetime(rok, miesiąc, dzień, godzina, minuta, sekunda)
-W linijce 164 ustawia się godzinę wschodu słońca wpisując kolejno datetime(rok, miesiąc, dzień, godzina, minuta, sekunda)
-W linijce 169 ustawia się godzinę zachodu słońca wpisując kolejno datetime(rok, miesiąc, dzień, godzina, minuta, sekunda)
-!! Można pominąć wpisywanie roku, miesiąca oraz dnia w tych funkcjach ponieważ nie mają one wpływu na ustawienie dnia
-
-Linijka 199 w pliku backend_test.py służy do testowania daty
-W tej linijce zmienia się tylko pierwszą funkcję (miesiąc i dzień). W przypadku zmiany roku, w drugiej funkcji też należy tak aby był ten sam
