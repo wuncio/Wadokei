@@ -73,11 +73,15 @@ function updateTimeDisplays() {
     const londonTime = new Date(now.toLocaleString("en-US", { timeZone: "Europe/London" }));
     const tokyoTime = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Tokyo" }));
     const sydneyTime = new Date(now.toLocaleString("en-US", { timeZone: "Australia/Sydney" }));
+    const kyotoTime = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Tokyo" }));
+    const naraTime = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Tokyo" }));
 
     document.getElementById("nyTime").textContent = `New York: ${formatTime(nyTime)}`;
     document.getElementById("londonTime").textContent = `London: ${formatTime(londonTime)}`;
     document.getElementById("tokyoTime").textContent = `Tokyo: ${formatTime(tokyoTime)}`;
     document.getElementById("sydneyTime").textContent = `Sydney: ${formatTime(sydneyTime)}`;
+    document.getElementById("kyotoTime").textContent = `Kyoto: ${formatTime(kyotoTime)}`;
+    document.getElementById("naraTime").textContent = `Nara: ${formatTime(naraTime)}`;
 }
 
 function setTimezone() {
@@ -218,7 +222,7 @@ async function handleTimezoneChange() {
 
     await setTimezone();
     getTimezoneInfo();
-    startClockRotation();
+    await startClockRotation();
 
     document.getElementById("loadingScreen").classList.add("hidden");
     document.getElementById("clockApp").classList.remove("hidden");
