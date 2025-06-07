@@ -41,54 +41,75 @@
         "latitude": 52.2337172,
         "longitude": 21.0714322
     },
-    "moskwa": {
-        "city": "Moscow",
-        "country": "Russia",
-        "timezone": "Europe/Moscow",
-        "latitude": 55.625578,
-        "longitude": 37.6063916
+    "nara": {
+        "city": "Nara",
+        "country": "Japan",
+        "timezone": "Asia/Tokyo",
+        "latitude": 34.686471,
+        "longitude": 135.80254
     },
-    "rio do janeiro": {
-        "city": "Rio de Janeiro",
-        "country": "Brazil",
-        "timezone": "America/Sao_Paulo",
-        "latitude": -22.9110137,
-        "longitude": -43.2093727
+    "kyoto": {
+        "city": "Kyoto",
+        "country": "Japan",
+        "timezone": "Asia/Tokyo",
+        "latitude": 35.0115754,
+        "longitude": 135.7681441
     },
-    "waszyngton": {
-        "city": "Washington",
+    "kioto": {
+        "city": "Kyoto",
+        "country": "Japan",
+        "timezone": "Asia/Tokyo",
+        "latitude": 35.0115754,
+        "longitude": 135.7681441
+    },
+    "warszawa": {
+        "city": "Warsaw",
+        "country": "Poland",
+        "timezone": "Europe/Warsaw",
+        "latitude": 52.2319581,
+        "longitude": 21.0067249
+    },
+    "new york": {
+        "city": "New York",
         "country": "United States",
         "timezone": "America/New_York",
-        "latitude": 38.8950368,
-        "longitude": -77.0365427
+        "latitude": 40.7127281,
+        "longitude": -74.0060152
     },
-    "rio de janeiro": {
-        "city": "Rio de Janeiro",
-        "country": "Brazil",
-        "timezone": "America/Sao_Paulo",
-        "latitude": -22.9110137,
-        "longitude": -43.2093727
-    },
-    "bratislava": {
-        "city": "Bratislava",
-        "country": "Slovakia",
-        "timezone": "Europe/Bratislava",
-        "latitude": 48.1516988,
-        "longitude": 17.1093063
-    },
-    "berlin": {
-        "city": "Berlin",
-        "country": "Germany",
-        "timezone": "Europe/Berlin",
-        "latitude": 52.510885,
-        "longitude": 13.3989367
-    },
-    "honolulu": {
-        "city": "Honolulu",
+    "nowy jork": {
+        "city": "New York",
         "country": "United States",
-        "timezone": "Pacific/Honolulu",
-        "latitude": 21.304547,
-        "longitude": -157.855676
+        "timezone": "America/New_York",
+        "latitude": 40.7127281,
+        "longitude": -74.0060152
+    },
+    "london": {
+        "city": "London",
+        "country": "United Kingdom",
+        "timezone": "Europe/London",
+        "latitude": 51.4893335,
+        "longitude": -0.1440551
+    },
+    "londyn": {
+        "city": "London",
+        "country": "United Kingdom",
+        "timezone": "Europe/London",
+        "latitude": 51.4893335,
+        "longitude": -0.1440551
+    },
+    "tokio": {
+        "city": "Chiyoda",
+        "country": "Japan",
+        "timezone": "Asia/Tokyo",
+        "latitude": 35.6768601,
+        "longitude": 139.7638947
+    },
+    "tokyo": {
+        "city": "Chiyoda",
+        "country": "Japan",
+        "timezone": "Asia/Tokyo",
+        "latitude": 35.6768601,
+        "longitude": 139.7638947
     },
     "sidney": {
         "city": "Sydney",
@@ -96,19 +117,5 @@
         "timezone": "Australia/Sydney",
         "latitude": -33.8698439,
         "longitude": 151.2082848
-    },
-    "monaco": {
-        "city": "Monaco",
-        "country": "Monaco",
-        "timezone": "Europe/Monaco",
-        "latitude": 43.7323492,
-        "longitude": 7.4276832
-    },
-    "ryga": {
-        "city": "Riga",
-        "country": "Latvia",
-        "timezone": "Europe/Riga",
-        "latitude": 56.9493977,
-        "longitude": 24.1051846
     }
 }
