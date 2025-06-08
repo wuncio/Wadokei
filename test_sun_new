@@ -1,0 +1,76 @@
+import pytest
+from sun_rise_set import location_eph
+
+# Dane referencyjne z arkusza z 08.06.2025
+reference_data = {
+    "Warszawa":     [16.65, 7.35, 2.78, 1.23, 4.25, 20.90],
+    "Tokio":        [14.50, 9.5, 2.42, 1.58, 4.42, 18.92],
+    "Kioto":        [14.45, 9.55, 2.41, 1.59, 4.70, 19.15],
+    "Nara":         [14.42, 9.58, 2.40, 1.60, 4.72, 19.13],
+    "Londyn":       [16.48, 7.52, 2.75, 1.25, 4.75, 21.23],
+    "Helsinki":     [18.7, 5.3, 3.12, 0.88, 3.98, 22.68],
+    "Nairobi":      [12.05, 11.95, 2.01, 1.99, 6.5, 18.55],
+    "New Delhi":    [13.92, 10.08, 2.32, 1.68, 5.37, 19.28],
+    "Canberra":     [9.83, 14.17, 1.64, 2.36, 7.12, 16.95],
+    "Ottawa":       [15.57, 8.43, 2.59, 1.41, 5.23, 20.8],
+    "Los Angeles":  [14.35, 9.65, 2.39, 1.61, 5.68, 20.03],
+    "Meksyk":       [13.27, 10.73, 2.21, 1.79, 5.95, 19.22],
+    "Rio de Janeiro": [10.77, 13.23, 1.79, 2.21, 6.47, 17.23],
+    "Santiago de Chile": [9.98, 14.04, 1.66, 2.34, 7.7, 17.68]
+
+}
+
+for k, v in reference_data.items():
+    print(k, type(v), v)
+
+@pytest.mark.parametrize("city, expected", reference_data.items())
+def test_location_eph_with_expected_values(city, expected):
+    result = location_eph(city)
+
+    # Indeksy z Twojej funkcji:
+    sun_hours           = round(result[2], 2)
+    moon_hours          = round(result[3], 2)
+    sun_hours_wadokei   = round(result[4], 2)
+    moon_hours_wadokei  = round(result[5], 2)
+    sunrise_dec         = round(result[6], 2)
+    sunset_dec          = round(result[7], 2)
+
+    # Porównujemy z zaokrągleniem do 0.05
+    for val, ref in zip(
+        [sun_hours, moon_hours, sun_hours_wadokei, moon_hours_wadokei, sunrise_dec, sunset_dec],
+        expected
+    ):
+        assert abs(val - ref) <= 0.05, f"{city}: expected {ref}, got {val}"
+
+# Dane referencyjne error
+reference_data = {
+    "Warszawa":     [166.65, 7.35, 2.78, 1.23, 4.25, 20.90],
+    "x":  [14.35, 9.65, 2.39, 1.61, 5.68, 20.03],
+    "-":       [13.27, 10.73, 2.21, 1.79, 5.95, 19.22],
+    " ": [10.77, 13.23, 1.79, 2.21, 6.47, 17.23],
+    "Santiago": [9.98, 14.04, 1.66, 2.34, 7.7, 17.68]
+
+}
+
+for k, v in reference_data.items():
+    print(k, type(v), v)
+
+@pytest.mark.parametrize("city, expected", reference_data.items())
+def test_location_eph_with_expected_values(city, expected):
+    result = location_eph(city)
+
+    # Indeksy z Twojej funkcji:
+    sun_hours           = round(result[2], 2)
+    moon_hours          = round(result[3], 2)
+    sun_hours_wadokei   = round(result[4], 2)
+    moon_hours_wadokei  = round(result[5], 2)
+    sunrise_dec         = round(result[6], 2)
+    sunset_dec          = round(result[7], 2)
+
+    # Porównujemy z zaokrągleniem do 0.05
+    for val, ref in zip(
+        [sun_hours, moon_hours, sun_hours_wadokei, moon_hours_wadokei, sunrise_dec, sunset_dec],
+        expected
+    ):
+        assert abs(val - ref) <= 0.05, f"{city}: expected {ref}, got {val}"
+
