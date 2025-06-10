@@ -1,0 +1,121 @@
+{
+    "america/new_york": {
+        "city": "New York",
+        "country": "United States",
+        "timezone": "America/New_York",
+        "latitude": 40.7127281,
+        "longitude": -74.0060152
+    },
+    "europe/london": {
+        "city": "London",
+        "country": "United Kingdom",
+        "timezone": "Europe/London",
+        "latitude": 51.5022348,
+        "longitude": -0.1779189
+    },
+    "asia/tokyo": {
+        "city": "Tokyo",
+        "country": "Japan",
+        "timezone": "Asia/Tokyo",
+        "latitude": 43.4339535,
+        "longitude": 142.9521222
+    },
+    "australia/sydney": {
+        "city": "Sydney",
+        "country": "Australia",
+        "timezone": "Australia/Sydney",
+        "latitude": -33.8698439,
+        "longitude": 151.2082848
+    },
+    "warsaw": {
+        "city": "Warsaw",
+        "country": "Poland",
+        "timezone": "Europe/Warsaw",
+        "latitude": 52.2337172,
+        "longitude": 21.0714322
+    },
+    "warsaw mazovia poland": {
+        "city": "Warsaw",
+        "country": "Poland",
+        "timezone": "Europe/Warsaw",
+        "latitude": 52.2337172,
+        "longitude": 21.0714322
+    },
+    "nara": {
+        "city": "Nara",
+        "country": "Japan",
+        "timezone": "Asia/Tokyo",
+        "latitude": 34.686471,
+        "longitude": 135.80254
+    },
+    "kyoto": {
+        "city": "Kyoto",
+        "country": "Japan",
+        "timezone": "Asia/Tokyo",
+        "latitude": 35.0115754,
+        "longitude": 135.7681441
+    },
+    "kioto": {
+        "city": "Kyoto",
+        "country": "Japan",
+        "timezone": "Asia/Tokyo",
+        "latitude": 35.0115754,
+        "longitude": 135.7681441
+    },
+    "warszawa": {
+        "city": "Warsaw",
+        "country": "Poland",
+        "timezone": "Europe/Warsaw",
+        "latitude": 52.2319581,
+        "longitude": 21.0067249
+    },
+    "new york": {
+        "city": "New York",
+        "country": "United States",
+        "timezone": "America/New_York",
+        "latitude": 40.7127281,
+        "longitude": -74.0060152
+    },
+    "nowy jork": {
+        "city": "New York",
+        "country": "United States",
+        "timezone": "America/New_York",
+        "latitude": 40.7127281,
+        "longitude": -74.0060152
+    },
+    "london": {
+        "city": "London",
+        "country": "United Kingdom",
+        "timezone": "Europe/London",
+        "latitude": 51.4893335,
+        "longitude": -0.1440551
+    },
+    "londyn": {
+        "city": "London",
+        "country": "United Kingdom",
+        "timezone": "Europe/London",
+        "latitude": 51.4893335,
+        "longitude": -0.1440551
+    },
+    "tokio": {
+        "city": "Chiyoda",
+        "country": "Japan",
+        "timezone": "Asia/Tokyo",
+        "latitude": 35.6768601,
+        "longitude": 139.7638947
+    },
+    "tokyo": {
+        "city": "Chiyoda",
+        "country": "Japan",
+        "timezone": "Asia/Tokyo",
+        "latitude": 35.6768601,
+        "longitude": 139.7638947
+    },
+    "sidney": {
+        "city": "Sydney",
+        "country": "Australia",
+        "timezone": "Australia/Sydney",
+        "latitude": -33.8698439,
+        "longitude": 151.2082848
+    }
+}

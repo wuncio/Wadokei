@@ -1,0 +1,65 @@
+var namespaces_dup =
+[
+    [ "backend", "namespacebackend.html", [
+      [ "change_time_zone", "namespacebackend.html#a7dbcfdd66daae7e635b4975bd6f9dc84", null ],
+      [ "check_date", "namespacebackend.html#a49df048731ec7c71d552b4c0ae230929", null ],
+      [ "get_local_coors", "namespacebackend.html#acbb3f1a0cba1396a12d29d72ab320702", null ],
+      [ "get_timezone_info", "namespacebackend.html#a680cd3635e51a29ae2628ca20855b0d3", null ],
+      [ "index", "namespacebackend.html#a713e61c4cbcc0fa3f1e55f5d21cfae00", null ],
+      [ "set_timezone", "namespacebackend.html#ae269d2b449c21bcd58b0f0a1c944008f", null ],
+      [ "app", "namespacebackend.html#abf91f8852ffdcec6e8d5ea035d03c67c", null ],
+      [ "autoraise", "namespacebackend.html#ac5e6ffa0f79d6e2e0c1d53e1cab07db3", null ],
+      [ "custom_location", "namespacebackend.html#aa8ae7c109917854f725ec01fd0aefd00", null ],
+      [ "dates_zodiak", "namespacebackend.html#acaa23d4b5de32e52c4b9debe654e5423", null ],
+      [ "day", "namespacebackend.html#a39d3a960134210cf28e16d94287d7a45", null ],
+      [ "debug", "namespacebackend.html#a012537806fcf31809af1d51073ecd99d", null ],
+      [ "False", "namespacebackend.html#a40e61d4cf6d5c613fcd896404c6edf9e", null ],
+      [ "latitude", "namespacebackend.html#ae1045485be0e9f9323a9b748a6a50f9c", null ],
+      [ "log", "namespacebackend.html#a1022b7ca30d100cbdbb64ec5e7409905", null ],
+      [ "longitude", "namespacebackend.html#a4b1db5828f2dda6e9dcd952cb5e20efb", null ],
+      [ "new", "namespacebackend.html#a6118293113147db4118a26d887ae9adb", null ],
+      [ "night", "namespacebackend.html#a8af00309147a4bfcd93facf944ae5097", null ],
+      [ "quarter", "namespacebackend.html#a9b23d1e25d711eebb7315d85bf9e2170", null ],
+      [ "sunrise", "namespacebackend.html#ae0b855d9c88df0ecb7c7fd348c41bd88", null ],
+      [ "sunset", "namespacebackend.html#aa87107d6f1d726c81d372ca59e7c196f", null ],
+      [ "threaded", "namespacebackend.html#a78c3a6ee0090f8be6ac446f329f45475", null ],
+      [ "time_zone", "namespacebackend.html#a6c3bd3f9e00c93557748b184034d59c0", null ]
+    ] ],
+    [ "backend_test", "namespacebackend__test.html", [
+      [ "change_time_zone", "namespacebackend__test.html#a83d07cc50a9803f36e6bc133d6814d98", null ],
+      [ "check_date", "namespacebackend__test.html#acaad99e3e634bf9d141df2e5082ffa40", null ],
+      [ "get_local_coors", "namespacebackend__test.html#ac9095f85e4ae7fb414edbaae1be0f6c4", null ],
+      [ "get_timezone_info", "namespacebackend__test.html#a14bf94716e1c4fc6aea8fa95e816b5fc", null ],
+      [ "index", "namespacebackend__test.html#a4e537e3c16bfa9b75353b74d547bcd13", null ],
+      [ "set_timezone", "namespacebackend__test.html#adcf8918af9861e05df98ff3a3fb12ea4", null ],
+      [ "app", "namespacebackend__test.html#a52e4640f08f18af5e670d5238aeb0cd6", null ],
+      [ "autoraise", "namespacebackend__test.html#ac66456e01b6fd5352a6fc087a755ee8f", null ],
+      [ "custom_location", "namespacebackend__test.html#acaec291ecbf63e33187c664daa56afe5", null ],
+      [ "dates_zodiak", "namespacebackend__test.html#aabb6115086e1129dc353559d09609c49", null ],
+      [ "day", "namespacebackend__test.html#a7810449f4bc51dc5549ff9de69dfc663", null ],
+      [ "debug", "namespacebackend__test.html#a3b3a312563ca8a36c48f0eb180686661", null ],
+      [ "False", "namespacebackend__test.html#a8c9f53885c2265a1eba1707a6d218856", null ],
+      [ "latitude", "namespacebackend__test.html#a5986c57adc12a1bef2f02844bf0d06b0", null ],
+      [ "log", "namespacebackend__test.html#a9b032d228bdaec5f68776177891ddfbf", null ],
+      [ "longitude", "namespacebackend__test.html#ae491c1277f1e765a5296610ac731f9f2", null ],
+      [ "new", "namespacebackend__test.html#afdb0f82a502fc05af75a0c9619730b7f", null ],
+      [ "night", "namespacebackend__test.html#a23c69105b1ae308184b9309a58614942", null ],
+      [ "quarter", "namespacebackend__test.html#af2804550167a200e7cfee50e233a1a12", null ],
+      [ "sunrise", "namespacebackend__test.html#a093aaadbb6aeb01f208818be3736415a", null ],
+      [ "sunset", "namespacebackend__test.html#adc4aad866ace9ccbc6cd3685e595ff24", null ],
+      [ "threaded", "namespacebackend__test.html#ab06ef2de41ce92e7e4e67450ec0849dd", null ],
+      [ "time_zone", "namespacebackend__test.html#a8f685f7385e57ab8e7d018552beee270", null ]
+    ] ],
+    [ "main", "namespacemain.html", [
+      [ "city", "namespacemain.html#a1db602eba66d290891c0f80513dbf9d2", null ],
+      [ "country", "namespacemain.html#a70a8acd20a5ab444feeb9c6eac17746c", null ],
+      [ "ip", "namespacemain.html#a7fce28dbf8a92223f05bee3af1790bec", null ],
+      [ "name", "namespacemain.html#a75935476dce7e7a59f1c6604af9dad37", null ],
+      [ "place", "namespacemain.html#a3ef8129d8cb35c3bfac586fcefe7f9a9", null ],
+      [ "region", "namespacemain.html#af86187c6ba31b5dd52941daeda21433c", null ],
+      [ "sun", "namespacemain.html#a9d9907b5eaa98a94bd356cc9f9c7e37c", null ]
+    ] ],
+    [ "sun_rise_set", "namespacesun__rise__set.html", [
+      [ "location_eph", "namespacesun__rise__set.html#ab410acb70c63e8741d53fe1fb455290c", null ]
+    ] ]
+];

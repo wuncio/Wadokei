@@ -1,0 +1,26 @@
+var backend__test_8py =
+[
+    [ "backend_test.change_time_zone", "namespacebackend__test.html#a83d07cc50a9803f36e6bc133d6814d98", null ],
+    [ "backend_test.check_date", "namespacebackend__test.html#acaad99e3e634bf9d141df2e5082ffa40", null ],
+    [ "backend_test.get_local_coors", "namespacebackend__test.html#ac9095f85e4ae7fb414edbaae1be0f6c4", null ],
+    [ "backend_test.get_timezone_info", "namespacebackend__test.html#a14bf94716e1c4fc6aea8fa95e816b5fc", null ],
+    [ "backend_test.index", "namespacebackend__test.html#a4e537e3c16bfa9b75353b74d547bcd13", null ],
+    [ "backend_test.set_timezone", "namespacebackend__test.html#adcf8918af9861e05df98ff3a3fb12ea4", null ],
+    [ "backend_test.app", "namespacebackend__test.html#a52e4640f08f18af5e670d5238aeb0cd6", null ],
+    [ "backend_test.autoraise", "namespacebackend__test.html#ac66456e01b6fd5352a6fc087a755ee8f", null ],
+    [ "backend_test.custom_location", "namespacebackend__test.html#acaec291ecbf63e33187c664daa56afe5", null ],
+    [ "backend_test.dates_zodiak", "namespacebackend__test.html#aabb6115086e1129dc353559d09609c49", null ],
+    [ "backend_test.day", "namespacebackend__test.html#a7810449f4bc51dc5549ff9de69dfc663", null ],
+    [ "backend_test.debug", "namespacebackend__test.html#a3b3a312563ca8a36c48f0eb180686661", null ],
+    [ "backend_test.False", "namespacebackend__test.html#a8c9f53885c2265a1eba1707a6d218856", null ],
+    [ "backend_test.latitude", "namespacebackend__test.html#a5986c57adc12a1bef2f02844bf0d06b0", null ],
+    [ "backend_test.log", "namespacebackend__test.html#a9b032d228bdaec5f68776177891ddfbf", null ],
+    [ "backend_test.longitude", "namespacebackend__test.html#ae491c1277f1e765a5296610ac731f9f2", null ],
+    [ "backend_test.new", "namespacebackend__test.html#afdb0f82a502fc05af75a0c9619730b7f", null ],
+    [ "backend_test.night", "namespacebackend__test.html#a23c69105b1ae308184b9309a58614942", null ],
+    [ "backend_test.quarter", "namespacebackend__test.html#af2804550167a200e7cfee50e233a1a12", null ],
+    [ "backend_test.sunrise", "namespacebackend__test.html#a093aaadbb6aeb01f208818be3736415a", null ],
+    [ "backend_test.sunset", "namespacebackend__test.html#adc4aad866ace9ccbc6cd3685e595ff24", null ],
+    [ "backend_test.threaded", "namespacebackend__test.html#ab06ef2de41ce92e7e4e67450ec0849dd", null ],
+    [ "backend_test.time_zone", "namespacebackend__test.html#a8f685f7385e57ab8e7d018552beee270", null ]
+];

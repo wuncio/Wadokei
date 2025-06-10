@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Analog Clock with Timezones</title>
+  <link rel="stylesheet" href="static/CSS/styles.css">
+</head>
+<body>
+  <div id="loadingScreen" class="hidden">
+    <div class="spinner"></div>
+    <div class="loading-text">Loading...</div>
+  </div>
+  <div class="container" id="clockApp">
+    <div class="timezone-container">
+      <label for="timezoneSelect">Analog Clock Timezone:</label>
+      <select id="timezoneSelect" class="timezoneSelect" onchange="handleTimezoneChange()">
+        <option value="local" selected>Local Time</option>
+        <option value="America/New_York">New York</option>
+        <option value="Europe/London">London</option>
+        <option value="Asia/Tokyo">Tokyo</option>
+        <option value="Australia/Sydney">Sydney</option>
+        <option value="Asia/Tokyo">Kyoto</option>
+        <option value="Asia/Tokyo">Nara</option>
+      </select>
+      <label for="customTimezoneField">Type your location:</label>
+      <input type="text" id="customTimezoneField" placeholder="Enter custom location"/>
+      <button id="customTimezoneButton" onclick="addCustomTimezone()">Confirm custom location</button>
+    </div>
+    <div class="clock-container">
+      <div class="clock" id="clock">
+        <svg class="clock-shade" viewBox="0 0 100 100">
+          <path id="shadePath" fill="rgba(0, 0, 0, 0.5)" />
+        </svg>
+        <div class="hand hour" id="hourHand"></div>
+        <div class="hand minute" id="minuteHand"></div>
+        <div class="center"></div>
+      <div class="clock-inner" id="clockInner"></div>
+      </div>
+      <div class="seconds-display" id="secondsDisplay">Seconds: 00</div>
+    </div>
+
+    <div class="timezone-panel" id="timezonePanel">
+      <div class="timezone" id="localTime">Local: --:--:--</div>
+      <div class="timezone" id="nyTime">New York: --:--:--</div>
+      <div class="timezone" id="londonTime">London: --:--:--</div>
+      <div class="timezone" id="tokyoTime">Tokyo: --:--:--</div>
+      <div class="timezone" id="sydneyTime">Sydney: --:--:--</div>
+      <div class="timezone" id="kyotoTime">Kyoto: --:--:--</div>
+      <div class="timezone" id="naraTime">Nara: --:--:--</div>
+    </div>
+  </div>
+  <script src="static/Scripts/clock_script.js"></script>
+  <script>
+  //setShadedSector(3, 180);
+  //Loads the initial timezone and clock position,
+  document.addEventListener('DOMContentLoaded', handleTimezoneChange);
+  setInterval(updateClock, refreshRate * 1000);
+  setInterval(updateTimeDisplays, 1000);
+  setInterval(handleTimezoneChange, 15*60*1000);
+  </script>
+</body>
+</html>

@@ -168,6 +168,17 @@ def get_timezone_info():
             saved = load(f)
         tz = timezone(saved[name]["timezone"])
         date = datetime.now(tz)
+    date = datetime(2024, 3, 4, 12, 30, 0) # Wpisz własną godzinę np. datetime(2024, 3, 4, 12, 42, 26) to 2024-03-04 12:42:26
+    sunrise_temp = datetime(2024, 1, 1, 6, 30, 0) # Wpisz własną godzinę wschodu słońca (bez zmieniania trzech pierwszych wartości, tylko te trzy ostatnie wpływają na godzinę)
+    time_dec_sunrise = format(sunrise_temp, '%H:%M:%S')
+    (h, m, s) = time_dec_sunrise.split(":")
+    sunrise = int(h) + int(m) / 60 + int(s) / 3600
+
+    sunset_temp = datetime(2024, 1, 1, 18, 0,0)  # Wpisz własną godzinę zachodu słońca (bez zmieniania trzech pierwszych wartości, tylko te trzy ostatnie wpływają na godzinę)
+    time_dec_sunset = format(sunset_temp, '%H:%M:%S')
+    (h, m, s) = time_dec_sunset.split(":")
+    sunset = int(h) + int(m) / 60 + int(s) / 3600
+
     date_dec = int(format(date, '%H')) + int(format(date, '%M')) / 60 + int(format(date, '%S')) / 3600
     if sunrise <= date_dec <= sunset:
         temp = "D"
@@ -175,8 +186,8 @@ def get_timezone_info():
         temp = "N"
     deg_start = quarter[temp]["deg_s"]
     deg_end = quarter[temp]["deg_e"]
-    qt_start = quarter[temp]["q_s"]
-    qt_end = quarter[temp]["q_e"]
+    qt_start = sunrise
+    qt_end = sunset
     return jsonify({
         'hours': format(date, '%H'),
         'minutes': format(date, '%M'),
@@ -192,6 +203,15 @@ def get_timezone_info():
 
 @app.route('/check_date', methods=['GET'])
 def check_date():
+
+    year = 2025 # ROK
+    month = 2 # MIESIĄC
+    day = 2 # DZIEŃ
+    if month == 12 and day >= 7:
+        days = (datetime(year, month, day).date() - datetime(year, 12, 7).date()).days
+    else:
+        days = (datetime(year, month, day).date() - datetime(year-1, 12, 7).date()).days
+
     if 0 <= days < 30:
         temp = "rat"
     elif 30 <= days < 59:
@@ -216,7 +236,7 @@ def check_date():
         temp = "dog"
     else:
         temp = "pig"
-    print(temp, dates_zodiak[temp]["d_sum"] - days, dates_zodiak[temp]["k_s"] + 30 * (days - dates_zodiak[temp]["d_p"]) / dates_zodiak[temp]["d"])
+    print(temp)
     return jsonify({
         "days": dates_zodiak[temp]["d_sum"] - days,
         "angle": dates_zodiak[temp]["k_s"] + 30 * (days - dates_zodiak[temp]["d_p"]) / dates_zodiak[temp]["d"]

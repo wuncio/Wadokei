@@ -1,0 +1,26 @@
+var backend_8py =
+[
+    [ "backend.change_time_zone", "namespacebackend.html#a7dbcfdd66daae7e635b4975bd6f9dc84", null ],
+    [ "backend.check_date", "namespacebackend.html#a49df048731ec7c71d552b4c0ae230929", null ],
+    [ "backend.get_local_coors", "namespacebackend.html#acbb3f1a0cba1396a12d29d72ab320702", null ],
+    [ "backend.get_timezone_info", "namespacebackend.html#a680cd3635e51a29ae2628ca20855b0d3", null ],
+    [ "backend.index", "namespacebackend.html#a713e61c4cbcc0fa3f1e55f5d21cfae00", null ],
+    [ "backend.set_timezone", "namespacebackend.html#ae269d2b449c21bcd58b0f0a1c944008f", null ],
+    [ "backend.app", "namespacebackend.html#abf91f8852ffdcec6e8d5ea035d03c67c", null ],
+    [ "backend.autoraise", "namespacebackend.html#ac5e6ffa0f79d6e2e0c1d53e1cab07db3", null ],
+    [ "backend.custom_location", "namespacebackend.html#aa8ae7c109917854f725ec01fd0aefd00", null ],
+    [ "backend.dates_zodiak", "namespacebackend.html#acaa23d4b5de32e52c4b9debe654e5423", null ],
+    [ "backend.day", "namespacebackend.html#a39d3a960134210cf28e16d94287d7a45", null ],
+    [ "backend.debug", "namespacebackend.html#a012537806fcf31809af1d51073ecd99d", null ],
+    [ "backend.False", "namespacebackend.html#a40e61d4cf6d5c613fcd896404c6edf9e", null ],
+    [ "backend.latitude", "namespacebackend.html#ae1045485be0e9f9323a9b748a6a50f9c", null ],
+    [ "backend.log", "namespacebackend.html#a1022b7ca30d100cbdbb64ec5e7409905", null ],
+    [ "backend.longitude", "namespacebackend.html#a4b1db5828f2dda6e9dcd952cb5e20efb", null ],
+    [ "backend.new", "namespacebackend.html#a6118293113147db4118a26d887ae9adb", null ],
+    [ "backend.night", "namespacebackend.html#a8af00309147a4bfcd93facf944ae5097", null ],
+    [ "backend.quarter", "namespacebackend.html#a9b23d1e25d711eebb7315d85bf9e2170", null ],
+    [ "backend.sunrise", "namespacebackend.html#ae0b855d9c88df0ecb7c7fd348c41bd88", null ],
+    [ "backend.sunset", "namespacebackend.html#aa87107d6f1d726c81d372ca59e7c196f", null ],
+    [ "backend.threaded", "namespacebackend.html#a78c3a6ee0090f8be6ac446f329f45475", null ],
+    [ "backend.time_zone", "namespacebackend.html#a6c3bd3f9e00c93557748b184034d59c0", null ]
+];
